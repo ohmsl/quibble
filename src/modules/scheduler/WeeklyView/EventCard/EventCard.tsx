@@ -2,33 +2,44 @@ import {
     Card,
     CardContent,
     CardHeader,
-    IconButton,
     List,
-    ListItemIcon,
-    Menu,
-    MenuItem,
     Stack,
     Typography,
 } from "@mui/material";
 import { format } from "date-fns";
-import { EditIcon, MoreVerticalIcon, Trash2Icon } from "lucide-react";
-import { useState } from "react";
-import { MeetingEvent } from "../../../../types/Events/MeetingEvent";
+import { EditIcon, Trash2Icon } from "lucide-react";
+import { ActionMenu } from "../../../../components/ActionMenu";
+import { useDialog } from "../../../../providers/DialogProvider";
+import { UIEvent } from "../../../../types/Events/Event";
+import {
+    concretiseProjectedEvent,
+    ProjectedMeetingEvent,
+} from "../../../state/events/concretiseProjectedEvent";
+import { EventForm } from "../EventForm";
 import { EventRole } from "./EventRole";
 
 type EventCardProps = {
-    event: MeetingEvent;
+    event: UIEvent;
 };
 
 export const EventCard = ({ event }: EventCardProps) => {
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const { showDialog, closeDialog } = useDialog();
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
+    const handleEditSubmit = () => {
+        if ((event as ProjectedMeetingEvent).projected) {
+            concretiseProjectedEvent(event);
+        }
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleEdit = () => {
+        showDialog(
+            <EventForm
+                defaultValues={event}
+                onCancel={closeDialog}
+                onSubmit={handleEditSubmit}
+            />,
+            { fullWidth: true, maxWidth: "md" },
+        );
     };
 
     return (
@@ -37,9 +48,21 @@ export const EventCard = ({ event }: EventCardProps) => {
                 title={event.title}
                 subheader={format(event.date, "PPPP")}
                 action={
-                    <IconButton size="small" onClick={handleClick}>
-                        <MoreVerticalIcon />
-                    </IconButton>
+                    <ActionMenu
+                        actions={[
+                            {
+                                label: "Edit",
+                                onClick: handleEdit,
+                                icon: <EditIcon size={20} />,
+                            },
+                            {
+                                label: "Delete",
+                                onClick: () => {},
+                                icon: <Trash2Icon size={20} />,
+                                menuItemProps: { sx: { color: "error.main" } },
+                            },
+                        ]}
+                    />
                 }
             />
 
@@ -63,33 +86,6 @@ export const EventCard = ({ event }: EventCardProps) => {
                     ))}
                 </List>
             </CardContent>
-
-            <Menu
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-            >
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <EditIcon size={20} />
-                    </ListItemIcon>
-                    Edit
-                </MenuItem>
-                <MenuItem onClick={handleClose} sx={{ color: "error.main" }}>
-                    <ListItemIcon sx={{ color: "error.main" }}>
-                        <Trash2Icon size={20} />
-                    </ListItemIcon>
-                    Delete
-                </MenuItem>
-            </Menu>
         </Card>
     );
 };

@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { StateCreator } from "zustand";
 import { Role } from "../../types/Role";
 
@@ -7,7 +8,7 @@ type RolesState = {
 
 type RolesActions = {
     addRole: (role: Role) => void;
-    updateRole: (role: Role) => void;
+    updateRole: (id: string, role: Role) => void;
     removeRole: (id: string) => void;
 };
 
@@ -21,16 +22,20 @@ export const createRolesSlice: StateCreator<RolesSlice, [], [], RolesSlice> = (
 
     // Actions
     addRole: (role: Role) => {
-        set((state) => ({ roles: [...state.roles, role] }));
-    },
-    updateRole: (role: Role) => {
         set((state) => ({
-            roles: state.roles.map((r) => (r.name === role.name ? role : r)),
+            roles: [...state.roles, { ...role, id: uuid() }],
         }));
     },
-    removeRole: (name: string) => {
+    updateRole: (id: string, role: Role) => {
         set((state) => ({
-            roles: state.roles.filter((role) => role.name !== name),
+            roles: state.roles.map((r) => (r.id === id ? role : r)),
+        }));
+    },
+    removeRole: (id: string) => {
+        set((state) => ({
+            roles: state.roles.filter((role) => role.id !== id),
         }));
     },
 });
+
+export const selectRoles = (state: RolesSlice) => state.roles;

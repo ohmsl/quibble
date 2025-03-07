@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 type Props = {
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     selected?: boolean;
     color?: "primary" | "secondary" | "success" | "error" | "info" | "warning";
     sx?: SxProps;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export const CheckButton: React.FC<Props> = ({
+    onClick,
     selected = false,
     color = "primary",
     sx,
@@ -35,6 +37,7 @@ export const CheckButton: React.FC<Props> = ({
 
     return (
         <Paper
+            onClick={onClick}
             component={ButtonBase}
             variant="outlined"
             sx={{
@@ -62,7 +65,9 @@ export const CheckButton: React.FC<Props> = ({
             }}
         >
             <Checkbox checked={selected} color={color} disableRipple />
-            <Typography fontWeight={500}>{children}</Typography>
+            <Typography fontWeight={500} my={0.5} textAlign="left">
+                {children}
+            </Typography>
         </Paper>
     );
 };

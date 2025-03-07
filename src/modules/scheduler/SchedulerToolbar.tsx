@@ -7,9 +7,7 @@ import {
     Toolbar,
 } from "@mui/material";
 import { DownloadIcon, PlusIcon, Sparkles as SparklesIcon } from "lucide-react";
-import { v4 as uuid } from "uuid";
 import { useDialog } from "../../providers/DialogProvider";
-import { Role } from "../../types/Role";
 import { useAppState } from "../state/useAppState";
 import { EventForm, EventFormValues } from "./WeeklyView/EventForm";
 
@@ -17,26 +15,19 @@ export const SchedulerToolbar = () => {
     const { showDialog, closeDialog } = useDialog();
 
     const addEvent = useAppState.use.addEvent();
-    const roles = useAppState.use.roles();
 
     const handleSubmitEvent = (data: EventFormValues) => {
-        const id = uuid();
-        const requiredRoles = new Array<Role>();
-
-        for (const roleName of data.requiredRoles) {
-            const role = roles.find((role) => role.name === roleName);
-            if (!role) continue;
-
-            requiredRoles.push(role);
-        }
-
-        addEvent({ ...data, id, requiredRoles });
+        addEvent({
+            ...data,
+            requiredRoleIds: Array.from(data.requiredRoleIds),
+        });
+        closeDialog();
     };
 
     const handleAddEvent = () => {
         showDialog(
             <EventForm onCancel={closeDialog} onSubmit={handleSubmitEvent} />,
-            { fullWidth: true },
+            { fullWidth: true, maxWidth: "md" },
         );
     };
 

@@ -21,15 +21,23 @@ type Props = {
 
 export const RolesList: React.FC<Props> = ({ roles }) => {
     const { showDialog, closeDialog } = useDialog();
+    const addRole = useAppState.use.addRole();
     const updateRole = useAppState.use.updateRole();
     const removeRole = useAppState.use.removeRole();
+
+    const handleSaveRole = (role: Role) => {
+        if (!role.id) addRole(role);
+        else updateRole(role.id, role);
+
+        closeDialog();
+    };
 
     const handleEdit = (role: Role) => {
         showDialog(
             <RoleForm
                 defaultValues={role}
                 onClose={closeDialog}
-                onSubmit={updateRole}
+                onSubmit={handleSaveRole}
             />,
         );
     };
@@ -80,6 +88,7 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
                                 ]}
                             />
                         }
+                        sx={{ minHeight: 76 }}
                     >
                         <ListItemIcon>
                             {Icon ? <Icon /> : <CircleHelpIcon />}

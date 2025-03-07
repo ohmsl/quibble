@@ -19,6 +19,7 @@ const icons = Object.entries(roleIconMap).map(([name, Icon]) => ({
 }));
 
 const schema = z.object({
+    id: z.string().default("").readonly(),
     name: z.string().min(3, "Name must be at least 3 characters long"),
     description: z.string().optional(),
     icon: z.custom<keyof typeof roleIconMap>(),
@@ -150,7 +151,10 @@ export const RoleForm: React.FC<Props> = ({
                         };
 
                         return (
-                            <>
+                            <Stack flex={1}>
+                                <Typography variant="h6" gutterBottom>
+                                    Select an Icon
+                                </Typography>
                                 <IconPicker
                                     icons={icons}
                                     onChange={onSelectIcon}
@@ -161,7 +165,7 @@ export const RoleForm: React.FC<Props> = ({
                                         {errors.icon?.message}
                                     </Typography>
                                 )}
-                            </>
+                            </Stack>
                         );
                     }}
                 />

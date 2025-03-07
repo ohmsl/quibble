@@ -1,13 +1,14 @@
+import { v4 as uuid } from "uuid";
 import { StateCreator } from "zustand";
-import { MeetingEvent } from "../../types/Events/MeetingEvent";
+import { Event } from "../../../types/Events/MeetingEvent";
 
 type EventsState = {
-    events: Array<MeetingEvent>;
+    events: Array<Event>;
 };
 
 type EventsActions = {
-    addEvent: (event: MeetingEvent) => void;
-    updateEvent: (id: string, event: MeetingEvent) => void;
+    addEvent: (event: Omit<Event, "id">) => void;
+    updateEvent: (id: string, event: Event) => void;
     removeEvent: (id: string) => void;
 };
 
@@ -23,17 +24,21 @@ export const createEventsSlice: StateCreator<
     events: [],
 
     // Actions
-    addEvent: (event: MeetingEvent) => {
-        set((state) => ({ events: [...state.events, event] }));
+    addEvent: (event) => {
+        set((state) => ({
+            events: [...state.events, { ...event, id: uuid() }],
+        }));
     },
-    updateEvent: (id: string, event: MeetingEvent) => {
+    updateEvent: (id, event) => {
         set((state) => ({
             events: state.events.map((e) => (e.id === id ? event : e)),
         }));
     },
-    removeEvent: (id: string) => {
+    removeEvent: (id) => {
         set((state) => ({
             events: state.events.filter((event) => event.id !== id),
         }));
     },
 });
+
+export const selectEvents = (state: EventsSlice) => state.events;

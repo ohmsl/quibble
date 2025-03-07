@@ -1,6 +1,7 @@
 import { Box, ListItem, ListItemIcon, Select, Typography } from "@mui/material";
 import { useState } from "react";
 import { Role } from "../../../../types/Role";
+import { roleIconMap } from "../../../roles/roleIcons";
 
 type Props = {
     role: Role;
@@ -8,6 +9,7 @@ type Props = {
 
 export const EventRole: React.FC<Props> = ({ role }) => {
     const [value, setValue] = useState("none");
+    const Icon = roleIconMap[role.icon];
 
     return (
         <ListItem
@@ -21,7 +23,7 @@ export const EventRole: React.FC<Props> = ({ role }) => {
             disableGutters
         >
             <Box display="flex">
-                <ListItemIcon>{role.icon}</ListItemIcon>
+                <ListItemIcon>{Icon ? <Icon /> : null}</ListItemIcon>
                 <Typography fontWeight="bold">{role.name}</Typography>
             </Box>
 

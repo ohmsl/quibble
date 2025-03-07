@@ -1,9 +1,17 @@
 import { Grid2 as Grid } from "@mui/material";
+import { createSelectEventsForRange } from "../state/events/selectors/createSelectEventsForRange";
 import { useAppState } from "../state/useAppState";
 import { EventCard } from "./WeeklyView/EventCard/EventCard";
 
-export const Events = () => {
-    const events = useAppState.use.events();
+type Props = {
+    rangeStart: Date;
+    rangeEnd: Date;
+};
+
+export const Events: React.FC<Props> = ({ rangeStart, rangeEnd }) => {
+    const events = useAppState(
+        createSelectEventsForRange(rangeStart, rangeEnd),
+    );
 
     return (
         <Grid container spacing={2} width="100%" mt={2}>
