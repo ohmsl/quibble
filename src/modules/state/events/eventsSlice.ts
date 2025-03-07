@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { StateCreator } from "zustand";
-import { Event } from "../../../types/Events/MeetingEvent";
+import { Event } from "../../../types/Events/Event";
 
 type EventsState = {
     events: Array<Event>;

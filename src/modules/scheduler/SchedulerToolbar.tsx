@@ -20,6 +20,7 @@ export const SchedulerToolbar = () => {
         addEvent({
             ...data,
             requiredRoleIds: Array.from(data.requiredRoleIds),
+            type: "custom",
         });
         closeDialog();
     };

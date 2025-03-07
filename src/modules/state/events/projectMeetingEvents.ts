@@ -19,11 +19,11 @@ export function projectMeetingEvents(
     },
     rangeStart: Date,
     rangeEnd: Date,
-): UIEvent[] {
+): Array<UIEvent> {
     if (rangeEnd < rangeStart) {
         throw new Error("rangeEnd must be greater than or equal to rangeStart");
     }
-    const projectedEvents: UIEvent[] = [];
+    const projectedEvents = new Array<UIEvent>();
 
     // Iterate through each day in the date range.
     for (
@@ -39,7 +39,6 @@ export function projectMeetingEvents(
                 title: "Midweek Meeting",
                 date: currentDate.toISOString(),
                 requiredRoles: [],
-                recurring: true,
                 type: "midweek",
             });
         } else if (weekday === settings.weekendMeetingDay) {
@@ -48,7 +47,6 @@ export function projectMeetingEvents(
                 title: "Weekend Meeting",
                 date: currentDate.toISOString(),
                 requiredRoles: [],
-                recurring: true,
                 type: "weekend",
             });
         }

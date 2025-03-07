@@ -18,15 +18,20 @@ export const createSelectEventsForRange = (rangeStart: Date, rangeEnd: Date) =>
     createSelector(
         [selectEvents, selectRoles, selectMeetingSettings],
         (events, roles, settings): Array<UIEvent> => {
-            // Map concrete events to UIEvents with their associated roles.
-            const concreteUIEvents: Array<UIEvent> = events.map((event) => {
-                const requiredRoles: Array<Role> = [];
-                for (const roleId of event.requiredRoleIds) {
-                    const role = roles.find((r) => r.id === roleId);
-                    if (role) requiredRoles.push(role);
-                }
-                return { ...event, requiredRoles };
-            });
+            // Filter concrete events to only include those within the date range and map them to UIEvents with their associated roles.
+            const concreteUIEvents: Array<UIEvent> = events
+                .filter((event) => {
+                    const eventDate = new Date(event.date);
+                    return eventDate >= rangeStart && eventDate <= rangeEnd;
+                })
+                .map((event) => {
+                    const requiredRoles: Array<Role> = [];
+                    for (const roleId of event.requiredRoleIds) {
+                        const role = roles.find((r) => r.id === roleId);
+                        if (role) requiredRoles.push(role);
+                    }
+                    return { ...event, requiredRoles };
+                });
 
             // Generate projected meeting events based on user settings and the provided date range.
             const projectedEvents: Array<UIEvent> = projectMeetingEvents(

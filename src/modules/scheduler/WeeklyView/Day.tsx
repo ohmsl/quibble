@@ -29,10 +29,10 @@ export const Day: React.FC<DayProps> = ({ date, eventsOnDay }) => {
                     width: 32,
                     height: 32,
                     background: today
-                        ? alpha(theme.palette.info.main, 0.15)
+                        ? alpha(theme.palette.primary.main, 0.15)
                         : "transparent",
                     color: today
-                        ? "info.main"
+                        ? "primary.main"
                         : past
                           ? "text.secondary"
                           : "text.primary",
