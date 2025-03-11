@@ -9,21 +9,21 @@ import { DialogProvider } from "./providers/DialogProvider";
 import theme from "./theme/theme";
 
 export const Layout = () => {
-    useEffect(() => scan({ enabled: true }), []);
+	useEffect(() => scan({ enabled: true }), []);
 
-    return (
-        <ThemeProvider theme={theme}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DialogProvider>
-                    <CssBaseline />
-                    <Navbar />
-                    <Fade in>
-                        <Container sx={{ my: 3 }}>
-                            <Outlet />
-                        </Container>
-                    </Fade>
-                </DialogProvider>
-            </LocalizationProvider>
-        </ThemeProvider>
-    );
+	return (
+		<ThemeProvider theme={theme}>
+			<LocalizationProvider dateAdapter={AdapterDateFns}>
+				<DialogProvider>
+					<CssBaseline />
+					<Navbar />
+					<Fade in>
+						<Container sx={{ my: 3 }} maxWidth="xl">
+							<Outlet />
+						</Container>
+					</Fade>
+				</DialogProvider>
+			</LocalizationProvider>
+		</ThemeProvider>
+	);
 };

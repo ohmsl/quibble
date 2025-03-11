@@ -1,14 +1,19 @@
 import { Typography } from "@mui/material";
+import { useState } from "react";
+import { MonthlyView } from "../modules/scheduler/MonthlyView/MonthlyView";
 import { SchedulerToolbar } from "../modules/scheduler/SchedulerToolbar";
 import { WeeklyView } from "../modules/scheduler/WeeklyView/WeeklyView";
 
 export const ScheduleView = () => {
-    return (
-        <>
-            <Typography variant="h5">Meeting Schedule</Typography>
+	const [viewMode, setViewMode] = useState<"weekly" | "monthly">("weekly");
 
-            <SchedulerToolbar />
-            <WeeklyView />
-        </>
-    );
+	return (
+		<>
+			<Typography variant="h5">Meeting Schedule</Typography>
+
+			<SchedulerToolbar viewMode={viewMode} setViewMode={setViewMode} />
+			{viewMode === "weekly" && <WeeklyView />}
+			{viewMode === "monthly" && <MonthlyView />}
+		</>
+	);
 };
