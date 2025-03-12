@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { UIEvent } from "../../../../types/Events/Event";
+import { EnrichedEvent } from "../../../../types/Events/Event";
 import { Role } from "../../../../types/Role";
 import { selectRoles } from "../../rolesSlice";
 import { selectMeetingSettings } from "../../settings/settingsSlice";
@@ -17,9 +17,9 @@ import { projectMeetingEvents } from "../projectMeetingEvents";
 export const createSelectEventsForRange = (rangeStart: Date, rangeEnd: Date) =>
     createSelector(
         [selectEvents, selectRoles, selectMeetingSettings],
-        (events, roles, settings): Array<UIEvent> => {
+        (events, roles, settings): Array<EnrichedEvent> => {
             // Filter concrete events to only include those within the date range and map them to UIEvents with their associated roles.
-            const concreteUIEvents: Array<UIEvent> = events
+            const concreteUIEvents: Array<EnrichedEvent> = events
                 .filter((event) => {
                     const eventDate = new Date(event.date);
                     return eventDate >= rangeStart && eventDate <= rangeEnd;
@@ -34,7 +34,7 @@ export const createSelectEventsForRange = (rangeStart: Date, rangeEnd: Date) =>
                 });
 
             // Generate projected meeting events based on user settings and the provided date range.
-            const projectedEvents: Array<UIEvent> = projectMeetingEvents(
+            const projectedEvents: Array<EnrichedEvent> = projectMeetingEvents(
                 {
                     midweekMeetingDay: settings.midweekMeetingDay,
                     weekendMeetingDay: settings.weekendMeetingDay,

@@ -1,7 +1,8 @@
 // modules/state/events/projectMeetingEvents.ts
 
 import { addDays, startOfDay } from "date-fns";
-import type { UIEvent } from "../../../types/Events/Event";
+import type { EnrichedEvent } from "../../../types/Events/Event";
+import { ProjectedMeetingEvent } from "./concretiseProjectedEvent";
 
 /**
  * Generates projected meeting events based on the provided settings.
@@ -19,11 +20,11 @@ export function projectMeetingEvents(
     },
     rangeStart: Date,
     rangeEnd: Date,
-): Array<UIEvent> {
+): Array<EnrichedEvent> {
     if (rangeEnd < rangeStart) {
         throw new Error("rangeEnd must be greater than or equal to rangeStart");
     }
-    const projectedEvents = new Array<UIEvent>();
+    const projectedEvents = new Array<ProjectedMeetingEvent>();
 
     // Iterate through each day in the date range.
     for (
@@ -40,6 +41,7 @@ export function projectMeetingEvents(
                 date: currentDate.toISOString(),
                 requiredRoles: [],
                 type: "midweek",
+                projected: true,
             });
         } else if (weekday === settings.weekendMeetingDay) {
             projectedEvents.push({
@@ -48,6 +50,7 @@ export function projectMeetingEvents(
                 date: currentDate.toISOString(),
                 requiredRoles: [],
                 type: "weekend",
+                projected: true,
             });
         }
     }

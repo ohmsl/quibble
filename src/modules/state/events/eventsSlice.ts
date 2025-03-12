@@ -1,14 +1,14 @@
 import { v4 as uuid } from "uuid";
 import { StateCreator } from "zustand";
-import { Event } from "../../../types/Events/Event";
+import { StoredEvent } from "../../../types/Events/Event";
 
 type EventsState = {
-    events: Array<Event>;
+    events: Array<StoredEvent>;
 };
 
 type EventsActions = {
-    addEvent: (event: Omit<Event, "id">) => void;
-    updateEvent: (id: string, event: Event) => void;
+    addEvent: (event: Omit<StoredEvent, "id">) => void;
+    updateEvent: (id: string, event: Partial<StoredEvent>) => void;
     removeEvent: (id: string) => void;
 };
 
@@ -31,7 +31,7 @@ export const createEventsSlice: StateCreator<
     },
     updateEvent: (id, event) => {
         set((state) => ({
-            events: state.events.map((e) => (e.id === id ? event : e)),
+            events: state.events.map((e) => (e.id === id ? { ...e, ...event } : e)),
         }));
     },
     removeEvent: (id) => {

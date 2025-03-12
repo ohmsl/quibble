@@ -1,8 +1,8 @@
-import type { UIEvent } from "../../../types/Events/Event";
+import type { EnrichedEvent } from "../../../types/Events/Event";
 import type { Role } from "../../../types/Role";
 import { useAppState } from "../useAppState";
 
-export type ProjectedMeetingEvent = UIEvent & {
+export type ProjectedMeetingEvent = EnrichedEvent & {
     projected: true;
 };
 
@@ -15,7 +15,7 @@ export type ProjectedMeetingEvent = UIEvent & {
  * @returns A new concrete meeting event that can be modified independently.
  * @throws Error if the event provided is not a projected event.
  */
-export function concretiseProjectedEvent(event: UIEvent) {
+export function concretiseProjectedEvent(event: EnrichedEvent) {
     if (!(event as ProjectedMeetingEvent).projected) {
         throw new Error(
             "The event is not projected and does not require concretisation.",
@@ -23,7 +23,10 @@ export function concretiseProjectedEvent(event: UIEvent) {
     }
 
     useAppState.getState().addEvent({
-        ...event,
+        title: event.title,
+        description: event.description,
+        date: event.date,
         requiredRoleIds: event.requiredRoles.map((role: Role) => role.id),
+        type: event.type,
     });
 }
