@@ -1,8 +1,8 @@
-import type { EnrichedEvent } from "../../../types/Events/Event";
+import type { EventsRecord } from "../../../types/Events/Event";
 import type { Role } from "../../../types/Role";
 import { useAppState } from "../useAppState";
 
-export type ProjectedMeetingEvent = EnrichedEvent & {
+export type ProjectedMeetingEvent = EventsRecord & {
     projected: true;
 };
 
@@ -15,7 +15,7 @@ export type ProjectedMeetingEvent = EnrichedEvent & {
  * @returns A new concrete meeting event that can be modified independently.
  * @throws Error if the event provided is not a projected event.
  */
-export function concretiseProjectedEvent(event: EnrichedEvent) {
+export function concretiseProjectedEvent(event: EventsRecord) {
     if (!(event as ProjectedMeetingEvent).projected) {
         throw new Error(
             "The event is not projected and does not require concretisation.",

@@ -1,9 +1,9 @@
 import { Popover } from "@mui/material";
-import type { EnrichedEvent } from "../../../types/Events/Event";
+import { EventsRecord } from "../../../types/pb_types";
 import { EventCard } from "../WeeklyView/EventCard/EventCard";
 
 type Props = {
-    event: EnrichedEvent;
+    event: EventsRecord;
     anchorEl: HTMLElement | null;
     onClose: () => void;
 };

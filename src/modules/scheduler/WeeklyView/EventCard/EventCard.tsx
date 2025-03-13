@@ -11,23 +11,27 @@ import { EditIcon, Trash2Icon } from "lucide-react";
 import { ActionMenu } from "../../../../components/ActionMenu";
 import { ConfirmDialog } from "../../../../components/ConfirmDialog";
 import { useDialog } from "../../../../providers/DialogProvider";
-import { EnrichedEvent } from "../../../../types/Events/Event";
+import { EventsRecord } from "../../../../types/pb_types";
 import {
     type ProjectedMeetingEvent,
     concretiseProjectedEvent,
 } from "../../../state/events/concretiseProjectedEvent";
+import { createSelectRoles } from "../../../state/roles/selectors/createSelectRoles";
 import { useAppState } from "../../../state/useAppState";
 import { EventForm, EventFormValues } from "../EventForm";
 import { EventRole } from "./EventRole";
 
 type EventCardProps = {
-    event: EnrichedEvent;
+    event: EventsRecord;
     onClose?: () => void;
 };
 
 export const EventCard = ({ event, onClose }: EventCardProps) => {
     const updateEvent = useAppState.use.updateEvent();
     const removeEvent = useAppState.use.removeEvent();
+    const requiredRoles = useAppState(
+        createSelectRoles(event.required_role_ids),
+    );
 
     const { showDialog, closeDialog } = useDialog();
 
@@ -90,7 +94,8 @@ export const EventCard = ({ event, onClose }: EventCardProps) => {
                                 onClick: handleDelete,
                                 icon: <Trash2Icon size={20} />,
                                 menuItemProps: { sx: { color: "error.main" } },
-                                disabled: (event as ProjectedMeetingEvent).projected,
+                                disabled: (event as ProjectedMeetingEvent)
+                                    .projected,
                             },
                         ]}
                     />
@@ -112,7 +117,7 @@ export const EventCard = ({ event, onClose }: EventCardProps) => {
                     </Typography>
                 </Stack>
                 <List disablePadding>
-                    {event.requiredRoles.map((role) => (
+                    {requiredRoles.map((role) => (
                         <EventRole key={role.id} role={role} />
                     ))}
                 </List>

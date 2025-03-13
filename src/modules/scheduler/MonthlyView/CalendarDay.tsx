@@ -10,17 +10,19 @@ import {
 } from "@mui/material";
 import { format, isToday as isDateToday } from "date-fns";
 import { useState } from "react";
-import type { EnrichedEvent } from "../../../types/Events/Event";
+import { EventsRecord } from "../../../types/pb_types";
 import { EventPopover } from "./EventPopover";
 
 type Props = {
     day: Date;
-    events: Array<EnrichedEvent>;
+    events: Array<EventsRecord>;
     disabled?: boolean;
 };
 
 export const CalendarDay = ({ day, events, disabled }: Props) => {
-    const [selectedEvent, setSelectedEvent] = useState<EnrichedEvent | null>(null);
+    const [selectedEvent, setSelectedEvent] = useState<EventsRecord | null>(
+        null,
+    );
     const [eventPopoverAnchorEl, setEventPopoverAnchorEl] =
         useState<HTMLElement | null>(null);
 
@@ -41,7 +43,7 @@ export const CalendarDay = ({ day, events, disabled }: Props) => {
 
     const handleEventClick = (
         e: React.MouseEvent<HTMLButtonElement>,
-        event: EnrichedEvent,
+        event: EventsRecord,
     ) => {
         setSelectedEvent(event);
         setEventPopoverAnchorEl(e.currentTarget);
@@ -59,7 +61,9 @@ export const CalendarDay = ({ day, events, disabled }: Props) => {
                     <Typography
                         sx={[
                             {
-                                color: disabled ? "text.disabled" : "text.primary",
+                                color: disabled
+                                    ? "text.disabled"
+                                    : "text.primary",
                                 fontWeight: 600,
                             },
                             ...(isToday ? [todayStyle] : []),
@@ -68,7 +72,9 @@ export const CalendarDay = ({ day, events, disabled }: Props) => {
                         {format(day, "d")}
                     </Typography>
                     {events.map((event) => {
-                        const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+                        const handleClick = (
+                            e: React.MouseEvent<HTMLButtonElement>,
+                        ) => {
                             handleEventClick(e, event);
                         };
 
@@ -79,10 +85,14 @@ export const CalendarDay = ({ day, events, disabled }: Props) => {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "flex-start",
-                                    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+                                    backgroundColor: alpha(
+                                        theme.palette.primary.main,
+                                        0.1,
+                                    ),
                                     color: theme.palette.primary.main,
                                     ...theme.applyStyles("dark", {
-                                        color: theme.palette.primary.contrastText,
+                                        color: theme.palette.primary
+                                            .contrastText,
                                     }),
                                     [`& .${touchRippleClasses.child}`]: {
                                         bgcolor: theme.palette.primary.light,

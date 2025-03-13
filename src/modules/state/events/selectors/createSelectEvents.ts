@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { EnrichedEvent } from "../../../../types/Events/Event";
+import { EventsRecord } from "../../../../types/Events/Event";
 import { Role } from "../../../../types/Role";
 import { selectRoles } from "../../rolesSlice";
 import { selectEvents } from "../eventsSlice";
@@ -8,7 +8,7 @@ export const createSelectEvents = createSelector(
     [selectEvents, selectRoles],
     (events, roles) => {
         // TODO: Add projected UI events based on an inputted date range
-        const uiEvents = new Array<EnrichedEvent>();
+        const uiEvents = new Array<EventsRecord>();
 
         for (const event of events) {
             const requiredRoles = new Array<Role>();

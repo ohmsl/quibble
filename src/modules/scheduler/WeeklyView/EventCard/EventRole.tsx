@@ -1,15 +1,15 @@
 import { Box, ListItem, ListItemIcon, Select, Typography } from "@mui/material";
 import { useState } from "react";
-import { Role } from "../../../../types/Role";
+import { RolesRecord } from "../../../../types/pb_types";
 import { roleIconMap } from "../../../roles/roleIcons";
 
 type Props = {
-    role: Role;
+    role: RolesRecord;
 };
 
 export const EventRole: React.FC<Props> = ({ role }) => {
     const [value, setValue] = useState("none");
-    const Icon = roleIconMap[role.icon];
+    const Icon = roleIconMap[role.icon as keyof typeof roleIconMap];
 
     return (
         <ListItem

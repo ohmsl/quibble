@@ -10,7 +10,7 @@ import {
     Link,
     Stack,
     TextField,
-    Typography
+    Typography,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { Controller, useForm } from "react-hook-form";
@@ -23,7 +23,7 @@ import { useAppState } from "../../state/useAppState";
 const schema = z.object({
     title: z.string().min(2, "Title must be at least 2 characters long"),
     date: z.string().datetime(),
-    requiredRoleIds: z.array(z.custom<string>()),
+    required_role_ids: z.array(z.custom<string>()),
 });
 
 export type EventFormValues = z.infer<typeof schema>;
@@ -78,7 +78,9 @@ export const EventForm = ({ defaultValues, onSubmit, onCancel }: Props) => {
                             <DateTimePicker
                                 {...field}
                                 value={new Date(value)}
-                                onChange={(newValue) => onChange(newValue?.toISOString())}
+                                onChange={(newValue) =>
+                                    onChange(newValue?.toISOString())
+                                }
                                 label="Date"
                                 slotProps={{
                                     textField: {
@@ -92,25 +94,36 @@ export const EventForm = ({ defaultValues, onSubmit, onCancel }: Props) => {
                     />
 
                     <Controller
-                        name="requiredRoleIds"
+                        name="required_role_ids"
                         control={control}
                         defaultValue={[]}
                         render={({ field: { onChange, value } }) => (
                             <Box>
-                                <InputLabel sx={{ mb: 1 }}>Required Roles</InputLabel>
+                                <InputLabel sx={{ mb: 1 }}>
+                                    Required Roles
+                                </InputLabel>
                                 <Grid container spacing={1}>
                                     {roles.map((role) => {
-                                        const selected = value.includes(role.id);
+                                        const selected = value.includes(
+                                            role.id,
+                                        );
 
                                         const onClick = () => {
-                                            if (selected) value.splice(value.indexOf(role.id), 1);
+                                            if (selected)
+                                                value.splice(
+                                                    value.indexOf(role.id),
+                                                    1,
+                                                );
                                             else value.push(role.id);
 
                                             onChange(value);
                                         };
 
                                         return (
-                                            <Grid key={role.id} size={{ xs: 6, sm: 4 }}>
+                                            <Grid
+                                                key={role.id}
+                                                size={{ xs: 6, sm: 4 }}
+                                            >
                                                 <CheckButton
                                                     onClick={onClick}
                                                     selected={selected}
@@ -128,8 +141,13 @@ export const EventForm = ({ defaultValues, onSubmit, onCancel }: Props) => {
                                     {roles.length === 0 && (
                                         <Box>
                                             <Typography variant="body2">
-                                                You haven&apos;t created any roles yet.{" "}
-                                                <Link component={RRLink} to="/roles" onClick={closeDialog}>
+                                                You haven&apos;t created any
+                                                roles yet.{" "}
+                                                <Link
+                                                    component={RRLink}
+                                                    to="/roles"
+                                                    onClick={closeDialog}
+                                                >
                                                     Why not try creating one?
                                                 </Link>
                                             </Typography>

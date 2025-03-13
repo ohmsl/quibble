@@ -1,7 +1,6 @@
 import { createSelector } from "reselect";
-import { EnrichedEvent } from "../../../../types/Events/Event";
-import { Role } from "../../../../types/Role";
-import { selectRoles } from "../../rolesSlice";
+import { EventsRecord, RolesRecord } from "../../../../types/pb_types";
+import { selectRoles } from "../../roles/rolesSlice";
 import { selectMeetingSettings } from "../../settings/settingsSlice";
 import { selectEvents } from "../eventsSlice";
 import { projectMeetingEvents } from "../projectMeetingEvents";
@@ -17,16 +16,16 @@ import { projectMeetingEvents } from "../projectMeetingEvents";
 export const createSelectEventsForRange = (rangeStart: Date, rangeEnd: Date) =>
     createSelector(
         [selectEvents, selectRoles, selectMeetingSettings],
-        (events, roles, settings): Array<EnrichedEvent> => {
+        (events, roles, settings): Array<EventsRecord> => {
             // Filter concrete events to only include those within the date range and map them to UIEvents with their associated roles.
-            const concreteUIEvents: Array<EnrichedEvent> = events
+            const concreteUIEvents: Array<EventsRecord> = events
                 .filter((event) => {
                     const eventDate = new Date(event.date);
                     return eventDate >= rangeStart && eventDate <= rangeEnd;
                 })
                 .map((event) => {
-                    const requiredRoles: Array<Role> = [];
-                    for (const roleId of event.requiredRoleIds) {
+                    const requiredRoles: Array<RolesRecord> = [];
+                    for (const roleId of event.required_role_ids) {
                         const role = roles.find((r) => r.id === roleId);
                         if (role) requiredRoles.push(role);
                     }
@@ -34,7 +33,7 @@ export const createSelectEventsForRange = (rangeStart: Date, rangeEnd: Date) =>
                 });
 
             // Generate projected meeting events based on user settings and the provided date range.
-            const projectedEvents: Array<EnrichedEvent> = projectMeetingEvents(
+            const projectedEvents: Array<EventsRecord> = projectMeetingEvents(
                 {
                     midweekMeetingDay: settings.midweekMeetingDay,
                     weekendMeetingDay: settings.weekendMeetingDay,

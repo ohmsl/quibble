@@ -1,15 +1,17 @@
-import { v4 as uuid } from "uuid";
 import { StateCreator } from "zustand";
-import { StoredEvent } from "../../../types/Events/Event";
+import { EventsRecord } from "../../../types/pb_types";
+import pb from "../../pocketbase/pb";
 
 type EventsState = {
-    events: Array<StoredEvent>;
+    events: Array<EventsRecord>;
+    loading: boolean;
 };
 
 type EventsActions = {
-    addEvent: (event: Omit<StoredEvent, "id">) => void;
-    updateEvent: (id: string, event: Partial<StoredEvent>) => void;
-    removeEvent: (id: string) => void;
+    fetchEvents: () => Promise<void>;
+    addEvent: (event: Omit<EventsRecord, "id">) => Promise<void>;
+    updateEvent: (id: string, event: Partial<EventsRecord>) => Promise<void>;
+    removeEvent: (id: string) => Promise<void>;
 };
 
 export type EventsSlice = EventsState & EventsActions;
@@ -22,22 +24,57 @@ export const createEventsSlice: StateCreator<
 > = (set) => ({
     // State
     events: [],
+    loading: false,
 
     // Actions
-    addEvent: (event) => {
-        set((state) => ({
-            events: [...state.events, { ...event, id: uuid() }],
-        }));
+    fetchEvents: async () => {
+        set({ loading: true });
+        try {
+            const events = await pb
+                .collection<EventsRecord>("events")
+                .getFullList();
+            set({ events, loading: false });
+        } catch (error: unknown) {
+            console.error("Error fetching events:", error);
+            set({ loading: false });
+        }
     },
-    updateEvent: (id, event) => {
-        set((state) => ({
-            events: state.events.map((e) => (e.id === id ? { ...e, ...event } : e)),
-        }));
+
+    addEvent: async (event) => {
+        try {
+            const createdEvent = await pb
+                .collection<EventsRecord>("events")
+                .create(event);
+            set((state) => ({ events: [...state.events, createdEvent] }));
+        } catch (error: unknown) {
+            console.error("Error adding event:", error);
+        }
     },
-    removeEvent: (id) => {
-        set((state) => ({
-            events: state.events.filter((event) => event.id !== id),
-        }));
+
+    updateEvent: async (id, event) => {
+        try {
+            const updatedEvent = await pb
+                .collection<EventsRecord>("events")
+                .update(id, event);
+            set((state) => ({
+                events: state.events.map((e) =>
+                    e.id === id ? updatedEvent : e,
+                ),
+            }));
+        } catch (error: unknown) {
+            console.error("Error updating event:", error);
+        }
+    },
+
+    removeEvent: async (id) => {
+        try {
+            await pb.collection("events").delete(id);
+            set((state) => ({
+                events: state.events.filter((e) => e.id !== id),
+            }));
+        } catch (error: unknown) {
+            console.error("Error removing event:", error);
+        }
     },
 });
 
