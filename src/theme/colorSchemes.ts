@@ -1,98 +1,112 @@
-import { ColorSystemOptions, createTheme } from "@mui/material";
-import { DefaultColorScheme } from "@mui/material/styles/createThemeWithVars";
+import { ColorSystemOptions, createTheme } from '@mui/material';
+import { DefaultColorScheme } from '@mui/material/styles/createThemeWithVars';
 
 const theme = createTheme();
 const augmentColor = createTheme().palette.augmentColor;
 
-type ColorSchemes =
-    | (Partial<Record<DefaultColorScheme, boolean | ColorSystemOptions>> &
-          Record<never, ColorSystemOptions>)
-    | undefined;
+type ColorSchemes = (Partial<Record<DefaultColorScheme, boolean | ColorSystemOptions>> & Record<never, ColorSystemOptions>) | undefined;
 
 export const colorSchemes: ColorSchemes = {
     light: {
         palette: {
             background: {
-                default: "#FAFAFA",
-                paper: "#FFF",
+                default: '#FAFAFA',
+                paper: '#FFF',
             },
-            divider: "rgba(20, 20, 20, 0.1)",
+            divider: 'rgba(20, 20, 20, 0.1)',
             primary: theme.palette.augmentColor({
                 color: {
-                    main: "#3463FF",
-                    contrastText: "#fff",
+                    main: '#3463FF',
+                },
+            }),
+            secondary: theme.palette.augmentColor({
+                color: {
+                    main: '#000',
                 },
             }),
             neutral: theme.palette.augmentColor({
                 color: {
-                    main: "#E2E2E2",
-                    contrastText: "#000",
+                    main: '#E2E2E2',
+                },
+            }),
+            success: theme.palette.augmentColor({
+                color: {
+                    main: 'hsl(150, 86%, 42%)',
+                },
+            }),
+            info: theme.palette.augmentColor({
+                color: {
+                    main: 'hsl(216, 75%, 60%)',
+                },
+            }),
+            warning: theme.palette.augmentColor({
+                color: {
+                    main: 'hsl(60, 100%, 42%)',
                 },
             }),
             error: theme.palette.augmentColor({
                 color: {
-                    main: "#FF5630",
-                    contrastText: "#fff",
+                    main: 'hsl(358, 100%, 60%)',
                 },
             }),
         },
     },
     dark: {
         palette: {
-            mode: "dark",
+            mode: 'dark',
             background: {
-                default: "#060E13",
-                paper: "#101419",
+                default: '#060E13',
+                paper: '#101419',
             },
             text: {
-                primary: "#fff",
-                secondary: "#999",
-                disabled: "#666",
+                primary: '#fff',
+                secondary: '#999',
+                disabled: '#666',
             },
-            divider: "rgba(255, 255, 255, 0.05)",
+            divider: 'rgba(255, 255, 255, 0.05)',
             primary: augmentColor({
                 color: {
-                    main: "#3463FF",
-                    contrastText: "#fff",
+                    main: 'hsl(226deg, 100%, 60%)',
+                    dark: 'hsl(226deg, 100%, 6%)',
+                    contrastText: '#fff',
+                },
+            }),
+            secondary: augmentColor({
+                color: {
+                    main: 'hsl(0, 0%, 99%)',
+                    dark: '#000000',
                 },
             }),
             neutral: augmentColor({
                 color: {
-                    main: "#E2E2E2",
+                    main: '#E2E2E2',
 
-                    contrastText: "#000",
+                    contrastText: '#000',
                 },
             }),
             info: augmentColor({
                 color: {
-                    light: "#61F3F3",
-                    main: "#00B8D9",
-                    dark: "#006C9C",
-                    contrastText: "#fff",
+                    main: 'hsl(216, 87%, 65%)',
+                    dark: 'hsl(215, 100%, 6%)',
                 },
             }),
             success: augmentColor({
                 color: {
-                    light: "#77ED8B",
-                    main: "#22C55E",
-                    dark: "#118D57",
-                    contrastText: "#fff",
+                    main: 'hsl(150, 86%, 65%)',
+                    dark: 'hsl(150, 100%, 6%)',
                 },
             }),
             warning: augmentColor({
                 color: {
-                    light: "#FFD666",
-                    main: "#FFAB00",
-                    dark: "#B76E00",
-                    contrastText: "#fff",
+                    dark: 'hsl(64, 100%, 6%)',
+                    main: 'hsl(46, 87%, 65%)',
                 },
             }),
             error: theme.palette.augmentColor({
                 color: {
-                    light: "#FFAC82",
-                    main: "#FF5630",
-                    dark: "#B71D18",
-                    contrastText: "#fff",
+                    dark: 'hsl(358, 76%, 10%)',
+                    main: 'hsl(358, 100%, 70%)',
+                    light: 'hsl(358, 100%, 81%)',
                 },
             }),
         },

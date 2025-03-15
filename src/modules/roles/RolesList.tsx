@@ -88,10 +88,22 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
 								]}
 							/>
 						}
-						sx={{ minHeight: 76 }}
+						sx={{ minHeight: 76, pr: 7 }}
 					>
 						<ListItemIcon>{Icon ? <Icon /> : <CircleHelpIcon />}</ListItemIcon>
-						<ListItemText primary={role.name} secondary={role.description} />
+						<ListItemText
+							primary={role.name}
+							secondary={role.description}
+							slotProps={{
+								secondary: {
+									sx: {
+										textWrap: "nowrap",
+										overflow: "hidden",
+										textOverflow: "ellipsis",
+									},
+								},
+							}}
+						/>
 					</ListItem>
 				);
 			})}

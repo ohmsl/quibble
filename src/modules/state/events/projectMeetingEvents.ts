@@ -1,7 +1,7 @@
 // modules/state/events/projectMeetingEvents.ts
 
-import { addDays, startOfDay } from "date-fns";
-import { EventsRecord } from "../../../types/pb_types";
+import { addDays, startOfDay } from 'date-fns';
+import { EventsRecord } from '../../../types/pb_types';
 
 type ProjectedEvent = EventsRecord & {
     projected: boolean;
@@ -20,37 +20,35 @@ export function projectMeetingEvents(
     settings: {
         midweekMeetingDay: number;
         weekendMeetingDay: number;
+        midweekRequiredRoles?: Array<string>;
+        weekendRequiredRoles?: Array<string>;
     },
     rangeStart: Date,
     rangeEnd: Date,
 ): Array<EventsRecord> {
     if (rangeEnd < rangeStart) {
-        throw new Error("rangeEnd must be greater than or equal to rangeStart");
+        throw new Error('rangeEnd must be greater than or equal to rangeStart');
     }
     const projectedEvents = new Array<ProjectedEvent>();
 
     // Iterate through each day in the date range.
-    for (
-        let currentDate: Date = startOfDay(rangeStart);
-        currentDate <= rangeEnd;
-        currentDate = addDays(currentDate, 1)
-    ) {
+    for (let currentDate: Date = startOfDay(rangeStart); currentDate <= rangeEnd; currentDate = addDays(currentDate, 1)) {
         const weekday: number = currentDate.getDay();
 
         if (weekday === settings.midweekMeetingDay) {
             projectedEvents.push({
-                id: "",
-                title: "Midweek Meeting",
+                id: '',
+                title: 'Midweek Meeting',
                 date: currentDate.toISOString(),
-                required_role_ids: [],
+                required_role_ids: settings.midweekRequiredRoles || [],
                 projected: true,
             });
         } else if (weekday === settings.weekendMeetingDay) {
             projectedEvents.push({
-                id: "",
-                title: "Weekend Meeting",
+                id: '',
+                title: 'Weekend Meeting',
                 date: currentDate.toISOString(),
-                required_role_ids: [],
+                required_role_ids: settings.weekendRequiredRoles || [],
                 projected: true,
             });
         }

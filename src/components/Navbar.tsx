@@ -1,52 +1,46 @@
-import { AppBar, Button, Stack, Toolbar, Typography } from "@mui/material";
-import {
-    BarChart2Icon,
-    CalendarHeartIcon,
-    CalendarIcon,
-    SettingsIcon,
-    ShapesIcon,
-    UsersIcon,
-} from "lucide-react";
-import { useNavigate } from "react-router";
+import { AppBar, Button, Stack, Toolbar, Typography } from '@mui/material';
+import { BarChart2Icon, CalendarHeartIcon, CalendarIcon, SettingsIcon, ShapesIcon, UsersIcon } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router';
 
 const config = [
     {
-        label: "Dashboard",
+        label: 'Dashboard',
         icon: <BarChart2Icon size={20} />,
-        path: "/dashboard",
+        path: '/dashboard',
     },
     {
-        label: "Schedule",
+        label: 'Schedule',
         icon: <CalendarIcon size={20} />,
-        path: "/schedule",
+        path: '/schedule',
     },
     {
-        label: "Brothers",
+        label: 'Brothers',
         icon: <UsersIcon size={20} />,
-        path: "/brothers",
+        path: '/brothers',
     },
     {
-        label: "Roles",
+        label: 'Roles',
         icon: <ShapesIcon size={20} />,
-        path: "/roles",
+        path: '/roles',
     },
     {
-        label: "Settings",
+        label: 'Settings',
         icon: <SettingsIcon size={20} />,
-        path: "/settings",
+        path: '/settings',
     },
 ];
 
 export const Navbar = () => {
+    const location = useLocation();
     const navigate = useNavigate();
 
     return (
-        <AppBar position="static" enableColorOnDark>
+        <AppBar position="static">
             <Toolbar
                 sx={{
-                    width: "100%",
-                    maxWidth: "lg",
-                    mx: "auto",
+                    width: '100%',
+                    maxWidth: 'lg',
+                    mx: 'auto',
                     gap: 1,
                 }}
             >
@@ -55,12 +49,13 @@ export const Navbar = () => {
                     Quibble
                 </Typography>
                 <Stack direction="row" spacing={2} alignItems="center">
-                    {config.map((item) => (
+                    {config.map(item => (
                         <Button
                             key={item.label}
                             startIcon={item.icon}
                             color="inherit"
                             onClick={() => navigate(item.path, { viewTransition: true })}
+                            sx={{ bgcolor: location.pathname === item.path ? 'action.hover' : 'transparent' }}
                         >
                             {item.label}
                         </Button>

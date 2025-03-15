@@ -1,33 +1,44 @@
-import { StateCreator } from "zustand";
+import { createSelector } from 'reselect';
+import { StateCreator } from 'zustand';
+
+type MeetingSettings = {
+    day: number;
+    time?: string;
+    requiredRoleIds?: Array<string>;
+};
 
 type SettingsState = {
-    midweekMeetingDay: number;
-    weekendMeetingDay: number;
+    midweekMeetingSettings: MeetingSettings;
+    weekendMeetingSettings: MeetingSettings;
 };
 
 type SettingsActions = {
-    setMidweekMeetingDay: (day: number) => void;
-    setWeekendMeetingDay: (day: number) => void;
+    setMidweekMeetingSettings: (settings: MeetingSettings) => void;
+    setWeekendMeetingSettings: (settings: MeetingSettings) => void;
 };
 
 export type SettingsSlice = SettingsState & SettingsActions;
 
-export const createSettingsSlice: StateCreator<
-    SettingsSlice,
-    [],
-    [],
-    SettingsSlice
-> = (set) => ({
+export const createSettingsSlice: StateCreator<SettingsSlice, [], [], SettingsSlice> = set => ({
     // State
-    midweekMeetingDay: 0,
-    weekendMeetingDay: 0,
+    midweekMeetingSettings: {
+        day: 4,
+        time: '18:00',
+    },
+    weekendMeetingSettings: {
+        day: 0,
+        time: '10:00',
+    },
 
     // Actions
-    setMidweekMeetingDay: (day) => set({ midweekMeetingDay: day }),
-    setWeekendMeetingDay: (day) => set({ weekendMeetingDay: day }),
+    setMidweekMeetingSettings: settings => set({ midweekMeetingSettings: settings }),
+    setWeekendMeetingSettings: settings => set({ weekendMeetingSettings: settings }),
 });
 
-export const selectMeetingSettings = (state: SettingsSlice) => ({
-    midweekMeetingDay: state.midweekMeetingDay,
-    weekendMeetingDay: state.weekendMeetingDay,
-});
+export const selectMeetingSettings = createSelector(
+    (state: SettingsSlice) => state,
+    state => ({
+        midweekMeeting: state.midweekMeetingSettings,
+        weekendMeeting: state.weekendMeetingSettings,
+    }),
+);
