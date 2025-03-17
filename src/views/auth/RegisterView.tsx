@@ -1,14 +1,18 @@
+import AppleIcon from '@mui/icons-material/Apple';
+import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, CircularProgress, Container, Divider, Link, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
 export const RegisterView = () => {
+    const navigate = useNavigate();
+
     const [name, setName] = useState({ first: '', last: '' });
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { register, isLoading, user } = useAuth();
+    const { register, login, isLoading, user, error } = useAuth();
 
     const handleSubmit = () => {
         register({
@@ -17,6 +21,14 @@ export const RegisterView = () => {
             email,
             password,
         });
+    };
+
+    const handleAuthWithGoogle = () => {
+        login({ method: 'oauth', provider: 'google' });
+    };
+
+    const handleAuthWithApple = () => {
+        login({ method: 'oauth', provider: 'apple' });
     };
 
     const disabled = Boolean(!email || !password || isLoading || user);
@@ -65,12 +77,19 @@ export const RegisterView = () => {
                 <Link variant="body2" component={NavLink} to="/forgot-password">
                     Forgot password?
                 </Link>
+
+                <Button color="warning" variant="contained" onClick={() => navigate('/register/organisation')}>
+                    Skip
+                </Button>
+
                 <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} disabled={disabled}>
                     {isLoading ? <CircularProgress size={24} /> : 'Register'}
                 </Button>
-                <Typography variant="body2" color="error.main">
-                    {/* {error?.message} */}
-                </Typography>
+                {error && (
+                    <Typography variant="body2" color="error.main">
+                        {error}
+                    </Typography>
+                )}
                 <Stack direction="row" spacing={1} width="100%" justifyContent="center">
                     <Typography variant="body2">Already have an account?</Typography>
                     <Link component={NavLink} to="/login">
@@ -80,36 +99,12 @@ export const RegisterView = () => {
                     </Link>
                 </Stack>
                 <Divider>OR</Divider>
-                {/* <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              backgroundColor: "#F1F3F4",
-              "&:hover": {
-                backgroundColor: "#E1E4E5",
-              },
-              color: "#24292e",
-            }}
-            startIcon={<GoogleIcon />}
-            onClick={handleAuthWithGoogle}
-          >
-            Sign In with Google
-          </Button> */}
-                {/* <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              backgroundColor: "#FFF",
-              "&:hover": {
-                backgroundColor: "#F1F3F4",
-              },
-              color: "#24292e",
-            }}
-            startIcon={<AppleIcon />}
-            onClick={handleAuthWithApple}
-          >
-            Sign In with Apple
-          </Button> */}
+                <Button variant="contained" color="secondary" startIcon={<AppleIcon />} onClick={handleAuthWithApple} fullWidth>
+                    Sign Up with Apple
+                </Button>
+                <Button variant="contained" color="secondary" startIcon={<GoogleIcon />} onClick={handleAuthWithGoogle} fullWidth>
+                    Sign Up with Google
+                </Button>
                 {/* <Button
             variant="contained"
             fullWidth

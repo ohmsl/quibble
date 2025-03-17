@@ -1,3 +1,4 @@
+import AppleIcon from '@mui/icons-material/Apple';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, CircularProgress, Container, Divider, Link, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
@@ -12,6 +13,10 @@ export const LoginView = () => {
 
     const handleSubmit = () => {
         login({ method: 'password', email, password });
+    };
+
+    const handleAuthWithApple = () => {
+        login({ method: 'oauth', provider: 'apple' });
     };
 
     const handleAuthWithGoogle = () => {
@@ -61,36 +66,18 @@ export const LoginView = () => {
                     </Link>
                 </Stack>
                 <Divider>OR</Divider>
+                <Button variant="contained" color="secondary" startIcon={<AppleIcon />} onClick={handleAuthWithApple} fullWidth>
+                    Sign In with Apple
+                </Button>
                 <Button
                     variant="contained"
-                    fullWidth
-                    sx={{
-                        backgroundColor: '#F1F3F4',
-                        '&:hover': {
-                            backgroundColor: '#E1E4E5',
-                        },
-                        color: '#24292e',
-                    }}
+                    color="secondary"
                     startIcon={<GoogleIcon strokeWidth={24} />}
                     onClick={handleAuthWithGoogle}
+                    fullWidth
                 >
                     Sign In with Google
                 </Button>
-                {/* <Button
-              variant="contained"
-              fullWidth
-              sx={{
-                backgroundColor: "#FFF",
-                "&:hover": {
-                  backgroundColor: "#F1F3F4",
-                },
-                color: "#24292e",
-              }}
-              startIcon={<AppleIcon />}
-              onClick={handleAuthWithApple}
-            >
-              Sign In with Apple
-            </Button> */}
             </Stack>
         </Container>
     );

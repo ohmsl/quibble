@@ -11,7 +11,7 @@ export type OtpLoginParams = {
 
 export type OauthLoginParams = {
     method?: 'oauth';
-    provider: 'google' | 'facebook';
+    provider: 'google' | 'facebook' | 'apple';
 };
 
 export type LoginParams = PasswordLoginParams | OtpLoginParams | OauthLoginParams;

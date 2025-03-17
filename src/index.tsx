@@ -10,6 +10,7 @@ import { ScheduleView } from './views/ScheduleView';
 import { MeetingSettingsView } from './views/Settings/MeetingSettingsView';
 import { SettingsView } from './views/Settings/SettingsView';
 import { LoginView } from './views/auth/LoginView';
+import { RegisterOrganisationView } from './views/auth/RegisterOrganisationView';
 import { RegisterView } from './views/auth/RegisterView';
 import { ThemePreviewView } from './views/developer/ThemePreviewView';
 
@@ -21,6 +22,8 @@ createRoot(document.getElementById('root') as HTMLElement).render(
                     <Route element={<AuthLayout />}>
                         <Route path="/login" element={<LoginView />} />
                         <Route path="/register" element={<RegisterView />} />
+                        <Route path="/register/organisation" element={<RegisterOrganisationView />} />
+                        <Route path="/reset-password" />
                     </Route>
 
                     <Route element={<PageLayout />}>
