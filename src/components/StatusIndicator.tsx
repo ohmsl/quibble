@@ -4,27 +4,25 @@ import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAppState } from '../modules/state/useAppState';
 
-const StyledBadge = styled(Badge)(() => ({
+const StyledBadge = styled(Badge)(({ theme }) => ({
     position: 'fixed',
     top: 8,
     right: 8,
     '@keyframes pulse': {
         '0%': {
-            transform: 'scale(0.95)',
             boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.7)',
         },
         '70%': {
-            transform: 'scale(1)',
             boxShadow: '0 0 0 10px rgba(76, 175, 80, 0)',
         },
         '100%': {
-            transform: 'scale(0.95)',
             boxShadow: '0 0 0 0 rgba(76, 175, 80, 0)',
         },
     },
     '&.pulsing .MuiBadge-dot': {
         animation: 'pulse 2s infinite',
     },
+    zIndex: theme.zIndex.modal + 1,
 }));
 
 export const StatusIndicator = () => {

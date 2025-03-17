@@ -15,6 +15,7 @@ export enum Collections {
 	Events = "events",
 	MemberPreferences = "member_preferences",
 	Members = "members",
+	Organisations = "organisations",
 	Roles = "roles",
 	Users = "users",
 }
@@ -128,6 +129,14 @@ export type MembersRecord = {
 	updated?: IsoDateString
 }
 
+export type OrganisationsRecord = {
+	created?: IsoDateString
+	id: string
+	name?: string
+	owner_id?: RecordIdString
+	updated?: IsoDateString
+}
+
 export type RolesRecord = {
 	created?: IsoDateString
 	description?: string
@@ -146,6 +155,7 @@ export type UsersRecord = {
 	emailVisibility?: boolean
 	id: string
 	name?: string
+	organisation_id?: RecordIdString
 	password: string
 	tokenKey: string
 	updated?: IsoDateString
@@ -162,6 +172,7 @@ export type AssigneesResponse<Texpand = unknown> = Required<AssigneesRecord> & B
 export type EventsResponse<Texpand = unknown> = Required<EventsRecord> & BaseSystemFields<Texpand>
 export type MemberPreferencesResponse<Texpand = unknown> = Required<MemberPreferencesRecord> & BaseSystemFields<Texpand>
 export type MembersResponse<Texpand = unknown> = Required<MembersRecord> & BaseSystemFields<Texpand>
+export type OrganisationsResponse<Texpand = unknown> = Required<OrganisationsRecord> & BaseSystemFields<Texpand>
 export type RolesResponse<Texpand = unknown> = Required<RolesRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
@@ -177,6 +188,7 @@ export type CollectionRecords = {
 	events: EventsRecord
 	member_preferences: MemberPreferencesRecord
 	members: MembersRecord
+	organisations: OrganisationsRecord
 	roles: RolesRecord
 	users: UsersRecord
 }
@@ -191,6 +203,7 @@ export type CollectionResponses = {
 	events: EventsResponse
 	member_preferences: MemberPreferencesResponse
 	members: MembersResponse
+	organisations: OrganisationsResponse
 	roles: RolesResponse
 	users: UsersResponse
 }
@@ -208,6 +221,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'events'): RecordService<EventsResponse>
 	collection(idOrName: 'member_preferences'): RecordService<MemberPreferencesResponse>
 	collection(idOrName: 'members'): RecordService<MembersResponse>
+	collection(idOrName: 'organisations'): RecordService<OrganisationsResponse>
 	collection(idOrName: 'roles'): RecordService<RolesResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }

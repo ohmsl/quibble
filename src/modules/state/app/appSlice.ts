@@ -65,16 +65,23 @@ export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = (set, ge
     ((): void => {
         const originalFetch: typeof fetch = window.fetch.bind(window);
         let activeRequests = 0;
+        let loadingDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
         const startHttpRequest = (): void => {
             activeRequests += 1;
+            // Set loading state immediately when a request starts
             set({ loading: true });
         };
 
         const finishHttpRequest = (): void => {
             activeRequests = Math.max(0, activeRequests - 1);
             if (activeRequests === 0) {
-                set({ loading: false });
+                if (loadingDebounceTimer) clearTimeout(loadingDebounceTimer);
+
+                loadingDebounceTimer = setTimeout(() => {
+                    set({ loading: false });
+                    loadingDebounceTimer = null;
+                }, 1000);
             }
         };
 

@@ -1,9 +1,11 @@
-import { ListItemButton, ListItemText, Paper, Stack, Typography } from '@mui/material';
+import { Divider, ListItem, ListItemButton, ListItemText, Paper, Stack, Typography } from '@mui/material';
 import { ChevronRightIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../../hooks/useAuth';
 
 export const SettingsView = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     return (
         <>
@@ -11,7 +13,7 @@ export const SettingsView = () => {
                 Settings
             </Typography>
 
-            <Stack spacing={1}>
+            <Stack gap={1}>
                 <Paper variant="outlined" sx={{ overflow: 'hidden' }}>
                     <ListItemButton onClick={() => navigate('/settings/meetings')}>
                         <ListItemText primary="Meeting Schedule" secondary="Configure your meeting schedule and required roles" />
@@ -24,6 +26,15 @@ export const SettingsView = () => {
                         <ChevronRightIcon />
                     </ListItemButton>
                 </Paper>
+
+                <Divider sx={{ my: 1 }} />
+
+                <ListItem component={Paper} variant="outlined" sx={{ overflow: 'hidden' }} disablePadding>
+                    <ListItemButton onClick={logout}>
+                        <ListItemText primary="Logout" secondary="Logout from your account" />
+                        <ChevronRightIcon />
+                    </ListItemButton>
+                </ListItem>
             </Stack>
         </>
     );

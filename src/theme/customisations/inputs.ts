@@ -133,4 +133,17 @@ export const inputCustomisations: Components<Theme> = {
             }),
         },
     },
+    MuiInputBase: {
+        styleOverrides: {
+            root: ({ theme, ownerState }) => ({
+                '.MuiOutlinedInput-notchedOutline': {
+                    transition: 'border-color 0.1s ease-in-out, border-width 0.1s ease-in-out',
+                },
+
+                '&:hover:not(.Mui-focused) .MuiOutlinedInput-notchedOutline': {
+                    borderColor: !ownerState.disabled && !ownerState.error && ownerState.color && theme.palette.text.secondary,
+                },
+            }),
+        },
+    },
 };

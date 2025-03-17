@@ -46,7 +46,7 @@ export const colorSchemes: ColorSchemes = {
             }),
             error: theme.palette.augmentColor({
                 color: {
-                    main: 'hsl(358, 100%, 60%)',
+                    main: 'hsl(11deg, 100%, 59%)',
                 },
             }),
         },
