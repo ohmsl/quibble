@@ -3,24 +3,37 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, CircularProgress, Container, Divider, Link, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
-import { useAuth } from '../../hooks/useAuth';
+import { usePbStore } from '../../modules/state/pocketbase/usePbStore';
 
 export const RegisterView = () => {
     const navigate = useNavigate();
+
+    const [error, setError] = useState('');
 
     const [name, setName] = useState({ first: '', last: '' });
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { register, login, isLoading, user, error } = useAuth();
+    const { registerUser, login, isLoading, user } = usePbStore();
 
-    const handleSubmit = () => {
-        register({
-            firstName: name.first,
-            lastName: name.last,
-            email,
-            password,
-        });
+    const handleSubmit = async () => {
+        try {
+            await registerUser({
+                firstName: name.first,
+                lastName: name.last,
+                email,
+                password,
+            });
+
+            navigate('/register/organisation');
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError('An unknown error occurred');
+                console.error(error);
+            }
+        }
     };
 
     const handleAuthWithGoogle = () => {

@@ -36,9 +36,7 @@ export const createSettingsSlice: StateCreator<SettingsSlice, [], [], SettingsSl
 });
 
 export const selectMeetingSettings = createSelector(
-    (state: SettingsSlice) => state,
-    state => ({
-        midweekMeeting: state.midweekMeetingSettings,
-        weekendMeeting: state.weekendMeetingSettings,
-    }),
+    (state: SettingsSlice) => state.midweekMeetingSettings,
+    (state: SettingsSlice) => state.weekendMeetingSettings,
+    (midweekMeeting, weekendMeeting) => ({ midweekMeeting, weekendMeeting }),
 );

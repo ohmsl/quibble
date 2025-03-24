@@ -1,17 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import { IconPicker } from "./IconPicker";
-import { roleIconMap } from "./roleIcons";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { IconPicker } from './IconPicker';
+import { roleIconMap } from './roleIcons';
 
 const icons = Object.entries(roleIconMap).map(([name, Icon]) => ({
     name: name as keyof typeof roleIconMap,
@@ -19,12 +11,12 @@ const icons = Object.entries(roleIconMap).map(([name, Icon]) => ({
 }));
 
 const schema = z.object({
-    id: z.string().default("").readonly(),
-    name: z.string().min(3, "Name must be at least 3 characters long"),
+    id: z.string().default('').readonly(),
+    name: z.string().min(3, 'Name must be at least 3 characters long'),
     description: z.string().optional(),
     icon: z.custom<keyof typeof roleIconMap>(),
-    minAssignments: z.number().min(0, "Minimum assignments must be at least 0"),
-    maxAssignments: z.number().min(1, "Maximum assignments must be at least 1"),
+    minAssignments: z.number().min(0, 'Minimum assignments must be at least 0'),
+    maxAssignments: z.number().min(1, 'Maximum assignments must be at least 1'),
 });
 
 export type RoleFormValues = z.infer<typeof schema>;
@@ -35,35 +27,27 @@ type Props = {
     onClose: () => void;
 };
 
-export const RoleForm: React.FC<Props> = ({
-    defaultValues,
-    onSubmit,
-    onClose,
-}) => {
+export const RoleForm: React.FC<Props> = ({ defaultValues, onSubmit, onClose }) => {
     const {
         control,
         handleSubmit,
         formState: { errors, isValid },
     } = useForm<RoleFormValues>({
         resolver: zodResolver(schema),
-        mode: "onChange",
+        mode: 'onChange',
         defaultValues,
     });
 
     return (
-        <Stack
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ height: "100%" }}
-        >
-            <DialogTitle>{defaultValues ? "Edit" : "Create"} Role</DialogTitle>
+        <Stack component="form" onSubmit={handleSubmit(onSubmit)} sx={{ height: '100%' }}>
+            <DialogTitle>{defaultValues ? 'Edit' : 'Create'} Role</DialogTitle>
 
             <DialogContent
                 sx={{
-                    display: "flex",
-                    flexDirection: "column",
+                    display: 'flex',
+                    flexDirection: 'column',
                     flexGrow: 1,
-                    overflowY: "visible",
+                    overflowY: 'visible',
                     gap: 2,
                 }}
             >
@@ -72,13 +56,7 @@ export const RoleForm: React.FC<Props> = ({
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
-                        <TextField
-                            {...field}
-                            label="Title"
-                            error={!!errors.name}
-                            helperText={errors.name?.message}
-                            fullWidth
-                        />
+                        <TextField {...field} label="Title" error={!!errors.name} helperText={errors.name?.message} fullWidth />
                     )}
                 />
 
@@ -107,9 +85,7 @@ export const RoleForm: React.FC<Props> = ({
                         render={({ field: { onChange, ...field } }) => (
                             <TextField
                                 {...field}
-                                onChange={(e) =>
-                                    onChange(Number(e.target.value))
-                                }
+                                onChange={e => onChange(Number(e.target.value))}
                                 label="Minimum Assignments"
                                 error={!!errors.minAssignments}
                                 helperText={errors.minAssignments?.message}
@@ -126,7 +102,7 @@ export const RoleForm: React.FC<Props> = ({
                         render={({ field: { onChange, ...field } }) => (
                             <TextField
                                 {...field}
-                                onChange={(e) => {
+                                onChange={e => {
                                     onChange(Number(e.target.value));
                                 }}
                                 label="Maximum Assignments"
@@ -143,10 +119,7 @@ export const RoleForm: React.FC<Props> = ({
                     name="icon"
                     control={control}
                     render={({ field: { onChange, value } }) => {
-                        const onSelectIcon = (
-                            icon: keyof typeof roleIconMap,
-                        ) => {
-                            console.log(icon);
+                        const onSelectIcon = (icon: keyof typeof roleIconMap) => {
                             onChange(icon);
                         };
 
@@ -155,11 +128,7 @@ export const RoleForm: React.FC<Props> = ({
                                 <Typography variant="h6" gutterBottom>
                                     Select an Icon
                                 </Typography>
-                                <IconPicker
-                                    icons={icons}
-                                    onChange={onSelectIcon}
-                                    value={value}
-                                />
+                                <IconPicker icons={icons} onChange={onSelectIcon} value={value} />
                                 {errors.icon?.message && (
                                     <Typography variant="body2" color="error">
                                         {errors.icon?.message}
@@ -175,12 +144,7 @@ export const RoleForm: React.FC<Props> = ({
                 <Button variant="outlined" color="neutral" onClick={onClose}>
                     Cancel
                 </Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    disabled={!isValid}
-                >
+                <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
                     Save
                 </Button>
             </DialogActions>

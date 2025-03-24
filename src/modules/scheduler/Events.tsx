@@ -1,7 +1,7 @@
-import { Grid2 as Grid } from "@mui/material";
-import { createSelectEventsForRange } from "../state/events/selectors/createSelectEventsForRange";
-import { useAppState } from "../state/useAppState";
-import { EventCard } from "./WeeklyView/EventCard/EventCard";
+import { Grid2 as Grid } from '@mui/material';
+import { createSelectEventsForRange } from '../state/events/selectors/createSelectEventsForRange';
+import { useAppState } from '../state/useAppState';
+import { EventCard } from './WeeklyView/EventCard/EventCard';
 
 type Props = {
     rangeStart: Date;
@@ -9,14 +9,12 @@ type Props = {
 };
 
 export const Events: React.FC<Props> = ({ rangeStart, rangeEnd }) => {
-    const events = useAppState(
-        createSelectEventsForRange(rangeStart, rangeEnd),
-    );
+    const events = useAppState(createSelectEventsForRange(rangeStart, rangeEnd));
 
     return (
         <Grid container spacing={2} width="100%" mt={2}>
-            {events.map((event, index) => (
-                <Grid key={index} size={{ xs: 12, sm: 6 }}>
+            {events.map(event => (
+                <Grid key={event.id} size={{ xs: 12, sm: 6 }}>
                     <EventCard event={event} />
                 </Grid>
             ))}

@@ -96,8 +96,10 @@ export type AssigneesRecord = {
 	event_id?: RecordIdString
 	id: string
 	member_id?: RecordIdString
+	org_id?: RecordIdString
 	role_id?: RecordIdString
 	updated?: IsoDateString
+	user_id?: RecordIdString
 }
 
 export type EventsRecord = {
@@ -105,9 +107,11 @@ export type EventsRecord = {
 	date: IsoDateString
 	description?: string
 	id: string
+	org_id?: RecordIdString
 	required_role_ids: RecordIdString[]
 	title: string
 	updated?: IsoDateString
+	user_id?: RecordIdString
 }
 
 export type MemberPreferencesRecord = {
@@ -117,8 +121,10 @@ export type MemberPreferencesRecord = {
 	max_per_month?: number
 	member_id?: RecordIdString
 	min_gap_days?: number
+	org_id?: RecordIdString
 	preferred_roles?: RecordIdString[]
 	updated?: IsoDateString
+	user_id?: RecordIdString
 }
 
 export type MembersRecord = {
@@ -126,7 +132,9 @@ export type MembersRecord = {
 	created?: IsoDateString
 	id: string
 	name?: string
+	org_id?: RecordIdString
 	updated?: IsoDateString
+	user_id?: RecordIdString
 }
 
 export type OrganisationsRecord = {
@@ -145,7 +153,9 @@ export type RolesRecord = {
 	maxAssignments?: number
 	minAssignments?: number
 	name: string
+	org_id?: RecordIdString
 	updated?: IsoDateString
+	user_id?: RecordIdString
 }
 
 export type UsersRecord = {
@@ -155,8 +165,9 @@ export type UsersRecord = {
 	emailVisibility?: boolean
 	id: string
 	name?: string
-	organisation_id?: RecordIdString
+	org_ids?: RecordIdString[]
 	password: string
+	permission_level?: number
 	tokenKey: string
 	updated?: IsoDateString
 	verified?: boolean

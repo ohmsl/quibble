@@ -3,7 +3,7 @@ import { Outlet } from 'react-router';
 
 export const AuthLayout = () => {
     return (
-        <Box sx={{ display: 'flex', placeItems: 'center', height: '100vh' }}>
+        <Box sx={{ display: 'grid', placeItems: 'center', height: '100vh', p: 4, overflow: 'auto' }}>
             <Outlet />
         </Box>
     );

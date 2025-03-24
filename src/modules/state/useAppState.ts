@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { logger } from '../../utils/logger';
 import { AppSlice, createAppSlice } from './app/appSlice';
 import { createEventsSlice, type EventsSlice } from './events/eventsSlice';
 import { createMembersSlice, type MembersSlice } from './members/membersSlice';
@@ -8,7 +9,7 @@ import { createRolesSlice, type RolesSlice } from './roles/rolesSlice';
 import { createSettingsSlice, type SettingsSlice } from './settings/settingsSlice';
 import { createSelectors } from './utils/createSelectors';
 
-type AppState = AppSlice & EventsSlice & RolesSlice & PreferencesSlice & SettingsSlice & MembersSlice;
+export type AppState = AppSlice & EventsSlice & RolesSlice & PreferencesSlice & SettingsSlice & MembersSlice;
 
 export const useAppState = createSelectors(
     create<AppState>()(
@@ -25,19 +26,10 @@ export const useAppState = createSelectors(
                 name: 'appState',
                 storage: createJSONStorage(() => localStorage),
                 onRehydrateStorage: () => (state, error) => {
-                    // update state with latest from server
                     if (error) {
-                        console.error('[useAppState] Error rehydrating state:', error);
+                        logger.error('[useAppState] Error rehydrating state:', error);
                     } else {
                         if (!state) return;
-
-                        const { fetchEvents, fetchRoles, fetchMembers, fetchPreferences, subscribeToConnectionStatus } = state;
-
-                        fetchEvents();
-                        fetchRoles();
-                        fetchMembers();
-                        fetchPreferences();
-                        subscribeToConnectionStatus();
                     }
                 },
             },

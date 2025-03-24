@@ -35,7 +35,7 @@ export const createRolesSlice: StateCreator<RolesSlice, [], [], RolesSlice> = se
         }
     },
 
-    addRole: async (role: Role) => {
+    addRole: async (role: RolesRecord) => {
         try {
             const createdRole = await pb.collection<RolesRecord>(Collections.Roles).create(role);
             set(state => ({ roles: [...state.roles, createdRole] }));
@@ -44,7 +44,7 @@ export const createRolesSlice: StateCreator<RolesSlice, [], [], RolesSlice> = se
         }
     },
 
-    updateRole: async (id: string, role: Role) => {
+    updateRole: async (id: string, role: RolesRecord) => {
         try {
             await pb.collection<RolesRecord>(Collections.Roles).update(id, role);
             set(state => ({
@@ -68,6 +68,6 @@ export const createRolesSlice: StateCreator<RolesSlice, [], [], RolesSlice> = se
 });
 
 export const selectRoles = createSelector(
-    (state: RolesSlice) => state,
-    state => state.roles,
+    (state: RolesSlice) => state.roles,
+    roles => roles,
 );

@@ -1,6 +1,8 @@
 import { ThemeProvider } from '@mui/material';
+import { AnimatePresence } from 'motion/react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router';
+import { Initialiser } from './components/Initialiser';
 import { AuthLayout } from './layouts/AuthLayout';
 import { Layout } from './layouts/Layout';
 import { PageLayout } from './layouts/PageLayout';
@@ -17,25 +19,28 @@ import { ThemePreviewView } from './views/developer/ThemePreviewView';
 createRoot(document.getElementById('root') as HTMLElement).render(
     <ThemeProvider theme={theme}>
         <BrowserRouter>
-            <Routes>
-                <Route element={<Layout />}>
-                    <Route element={<AuthLayout />}>
-                        <Route path="/login" element={<LoginView />} />
-                        <Route path="/register" element={<RegisterView />} />
-                        <Route path="/register/organisation" element={<RegisterOrganisationView />} />
-                        <Route path="/reset-password" />
-                    </Route>
+            <Initialiser />
+            <AnimatePresence mode="wait">
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route element={<AuthLayout />}>
+                            <Route path="/login" element={<LoginView />} />
+                            <Route path="/register" element={<RegisterView />} />
+                            <Route path="/register/organisation" element={<RegisterOrganisationView />} />
+                            <Route path="/reset-password" />
+                        </Route>
 
-                    <Route element={<PageLayout />}>
-                        <Route index element={<ScheduleView />} />
-                        <Route path="/schedule" element={<ScheduleView />} />
-                        <Route path="/roles" element={<RolesView />} />
-                        <Route path="/settings" element={<SettingsView />} />
-                        <Route path="/settings/meetings" element={<MeetingSettingsView />} />
-                        <Route path="/developer/theme-preview" element={<ThemePreviewView />} />
+                        <Route element={<PageLayout />}>
+                            <Route index element={<ScheduleView />} />
+                            <Route path="/schedule" element={<ScheduleView />} />
+                            <Route path="/roles" element={<RolesView />} />
+                            <Route path="/settings" element={<SettingsView />} />
+                            <Route path="/settings/meetings" element={<MeetingSettingsView />} />
+                            <Route path="/developer/theme-preview" element={<ThemePreviewView />} />
+                        </Route>
                     </Route>
-                </Route>
-            </Routes>
+                </Routes>
+            </AnimatePresence>
         </BrowserRouter>
     </ThemeProvider>,
 );

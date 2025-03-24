@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import type { StateCreator } from 'zustand';
 import { LoginParams, OauthLoginParams, PasswordLoginParams } from '../../../types/auth/LoginParams';
-import { UsersRecord } from '../../../types/pb_types';
+import { Collections, OrganisationsRecord, UsersRecord } from '../../../types/pb_types';
 import pb from '../../pocketbase/pb';
 
 export interface AuthSlice {
@@ -143,6 +143,16 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
             pb.authStore.clear();
             set({ user: null, token: null, isAuthenticated: false });
             clearInterval(startProactiveTokenRefresh());
+        },
+
+        createOrganisation: async (data: {
+            name: string;
+        }) => {
+            try {
+                await pb.collection<OrganisationsRecord>(Collections.Organisations).create(data);
+            } catch {
+                set({ isLoading: false });
+            }
         },
 
         refreshToken: async () => {

@@ -1,6 +1,5 @@
-// modules/state/events/projectMeetingEvents.ts
-
 import { addDays, startOfDay } from 'date-fns';
+import { v4 as uuid } from 'uuid';
 import { EventsRecord } from '../../../types/pb_types';
 
 type ProjectedEvent = EventsRecord & {
@@ -37,7 +36,7 @@ export function projectMeetingEvents(
 
         if (weekday === settings.midweekMeetingDay) {
             projectedEvents.push({
-                id: '',
+                id: `projected_${uuid()}`,
                 title: 'Midweek Meeting',
                 date: currentDate.toISOString(),
                 required_role_ids: settings.midweekRequiredRoles || [],
@@ -45,7 +44,7 @@ export function projectMeetingEvents(
             });
         } else if (weekday === settings.weekendMeetingDay) {
             projectedEvents.push({
-                id: '',
+                id: `projected_${uuid()}`,
                 title: 'Weekend Meeting',
                 date: currentDate.toISOString(),
                 required_role_ids: settings.weekendRequiredRoles || [],

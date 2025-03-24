@@ -1,6 +1,6 @@
-import type { EventsRecord } from "../../../types/Events/Event";
-import type { Role } from "../../../types/Role";
-import { useAppState } from "../useAppState";
+import type { EventsRecord } from '../../../types/Events/Event';
+import type { Role } from '../../../types/Role';
+import { useAppState } from '../useAppState';
 
 export type ProjectedMeetingEvent = EventsRecord & {
     projected: true;
@@ -17,16 +17,13 @@ export type ProjectedMeetingEvent = EventsRecord & {
  */
 export function concretiseProjectedEvent(event: EventsRecord) {
     if (!(event as ProjectedMeetingEvent).projected) {
-        throw new Error(
-            "The event is not projected and does not require concretisation.",
-        );
+        throw new Error('The event is not projected and does not require concretisation.');
     }
 
     useAppState.getState().addEvent({
         title: event.title,
         description: event.description,
         date: event.date,
-        requiredRoleIds: event.requiredRoles.map((role: Role) => role.id),
-        type: event.type,
+        required_role_ids: event.requiredRoles.map((role: Role) => role.id),
     });
 }
