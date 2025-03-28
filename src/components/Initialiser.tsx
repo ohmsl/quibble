@@ -1,19 +1,23 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { isAuthed } from '../modules/auth/isAuthed';
-import { initialise } from '../modules/initialisation/initialise';
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { getUser } from "../modules/auth/getUser";
+import { initialise } from "../modules/initialisation/initialise";
 
 export const Initialiser = () => {
     const navigate = useNavigate();
-    const authed = isAuthed();
+    const user = getUser();
 
     useEffect(() => {
         const unsubscribe = initialise();
 
-        let targetRoute = '/';
+        let targetRoute = "/";
 
-        if (authed) targetRoute = '/schedule';
-        else targetRoute = '/login';
+        const loggedIn = !!user;
+        const hasOrg = (user?.org_ids || []).length > 0;
+
+        if (!loggedIn) targetRoute = "/login";
+        if (loggedIn && !hasOrg) targetRoute = "/register/organisation";
+        else targetRoute = "/schedule";
 
         navigate(targetRoute, { replace: true });
 

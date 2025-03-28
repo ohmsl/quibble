@@ -1,13 +1,23 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { usePbStore } from '../modules/state/pocketbase/usePbStore';
-import { LoginParams } from '../types/auth/LoginParams';
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { usePbStore } from "../modules/state/pocketbase/usePbStore";
+import { LoginParams } from "../types/auth/LoginParams";
 
 export const useAuth = () => {
     const navigate = useNavigate();
 
     const [error, setError] = useState<string | null>(null);
-    const { isAuthenticated, user, token, isLoading, registerUser, login, logout, refreshAuthState } = usePbStore();
+    const {
+        isAuthenticated,
+        user,
+        token,
+        isLoading,
+        registerUser,
+        registerOrganisation,
+        login,
+        logout,
+        refreshAuthState,
+    } = usePbStore();
 
     const handleRegister = async (data: {
         firstName: string;
@@ -17,34 +27,47 @@ export const useAuth = () => {
     }) => {
         try {
             await registerUser(data);
-            navigate('/schedule');
+            navigate("/schedule");
         } catch (error) {
             if (error instanceof Error) {
                 setError(error.message);
             } else {
-                setError('An unknown error occurred');
+                setError("An unknown error occurred");
             }
-            console.error('Registration error:', error);
+            console.error("Registration error:", error);
         }
     };
 
     const handleLogin = async (params: LoginParams) => {
         try {
             await login(params);
-            navigate('/schedule');
+            navigate("/schedule");
         } catch (error) {
             if (error instanceof Error) {
                 setError(error.message);
             } else {
-                setError('An unknown error occurred');
+                setError("An unknown error occurred");
             }
-            console.error('Login error:', error);
+            console.error("Login error:", error);
+        }
+    };
+
+    const handleRegisterOrganisation = async (name: string) => {
+        try {
+            await registerOrganisation(name);
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("An unknown error occurred");
+            }
+            console.error("Org registration error:", error);
         }
     };
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate("/login");
     };
 
     return {
@@ -54,6 +77,7 @@ export const useAuth = () => {
         isLoading,
         error,
         register: handleRegister,
+        registerOrganisation: handleRegisterOrganisation,
         login: handleLogin,
         logout: handleLogout,
         refreshAuthState,

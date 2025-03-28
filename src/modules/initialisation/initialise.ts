@@ -1,21 +1,22 @@
-import { createScopedLogger } from '../../utils/logger';
-import { isAuthed } from '../auth/isAuthed';
-import { useAppState } from '../state/useAppState';
-import { hijackFetch } from './routines/hijackFetch';
-import { subscribeToConnectionStatus } from './routines/subscribeToConnectionStatus';
+import { createScopedLogger } from "../../utils/logger";
+import { getUser } from "../auth/getUser";
+import { useAppState } from "../state/useAppState";
+import { hijackFetch } from "./routines/hijackFetch";
+import { subscribeToConnectionStatus } from "./routines/subscribeToConnectionStatus";
 
 /**
  * Function to initialise agnostic services or state
  */
 export const initialise = () => {
-    const logger = createScopedLogger('initialise');
+    const logger = createScopedLogger("initialise");
 
     const startTime = Date.now();
-    logger.info('Initialising application...');
+    logger.info("Initialising application...");
 
-    const { fetchEvents, fetchRoles, fetchMembers, fetchPreferences } = useAppState.getState();
+    const { fetchEvents, fetchRoles, fetchMembers, fetchPreferences } =
+        useAppState.getState();
 
-    if (isAuthed()) {
+    if (getUser()) {
         fetchEvents();
         fetchRoles();
         fetchMembers();

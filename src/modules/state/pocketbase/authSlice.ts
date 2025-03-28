@@ -1,8 +1,17 @@
-import { jwtDecode } from 'jwt-decode';
-import type { StateCreator } from 'zustand';
-import { LoginParams, OauthLoginParams, PasswordLoginParams } from '../../../types/auth/LoginParams';
-import { Collections, OrganisationsRecord, UsersRecord } from '../../../types/pb_types';
-import pb from '../../pocketbase/pb';
+import { jwtDecode } from "jwt-decode";
+import type { StateCreator } from "zustand";
+import {
+    LoginParams,
+    OauthLoginParams,
+    PasswordLoginParams,
+} from "../../../types/auth/LoginParams";
+import {
+    Collections,
+    MembersRecord,
+    OrganisationsRecord,
+    UsersRecord,
+} from "../../../types/pb_types";
+import pb from "../../pocketbase/pb";
 
 export interface AuthSlice {
     isAuthenticated: boolean;
@@ -21,6 +30,8 @@ export interface AuthSlice {
         password: string;
     }) => Promise<void>;
 
+    registerOrganisation: (name: string) => Promise<void>;
+
     login: (params: LoginParams) => Promise<void>;
     logout: () => void;
     refreshToken: () => Promise<void>;
@@ -30,11 +41,15 @@ export interface AuthSlice {
 const fiveMinutesInMs = 5 * 60 * 1000;
 
 async function loginWithPassword(data: PasswordLoginParams) {
-    return await pb.collection('users').authWithPassword(data.email, data.password);
+    return await pb
+        .collection("users")
+        .authWithPassword(data.email, data.password);
 }
 
 async function loginWithOauth(data: OauthLoginParams) {
-    return await pb.collection('users').authWithOAuth2({ provider: data.provider });
+    return await pb
+        .collection("users")
+        .authWithOAuth2({ provider: data.provider });
 }
 
 export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
@@ -59,7 +74,10 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
                 try {
                     await refreshToken();
                 } catch (error) {
-                    console.error('Token refresh failed, this may cause an unexpected logout.', error);
+                    console.error(
+                        "Token refresh failed, this may cause an unexpected logout.",
+                        error,
+                    );
                 }
             }
         }, fiveMinutesInMs);
@@ -86,10 +104,10 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
         isLoading: false,
         error: null,
 
-        registerUser: async data => {
+        registerUser: async (data) => {
             set({ isLoading: true, error: null });
             try {
-                await pb.collection('users').create({
+                await pb.collection("users").create({
                     name: `${data.firstName} ${data.lastName}`,
                     email: data.email,
                     password: data.password,
@@ -102,7 +120,7 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
                 });
 
                 if (!result.record) {
-                    throw new Error('Registration failed');
+                    throw new Error("Registration failed");
                 }
 
                 set({ isLoading: false, error: null });
@@ -115,18 +133,42 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
             }
         },
 
-        login: async params => {
+        registerOrganisation: async (name) => {
+            const userId = get().user?.id;
+            if (!userId) throw new Error("Not logged in");
+
+            set({ isLoading: true, error: null });
+            try {
+                await pb
+                    .collection<OrganisationsRecord>(Collections.Organisations)
+                    .create({ name, owner_id: userId });
+
+                set({ isLoading: false, error: null });
+            } catch (error) {
+                set({
+                    isLoading: false,
+                    error:
+                        error instanceof Error
+                            ? error.message
+                            : "Failed to register organisation",
+                });
+                throw error;
+            }
+            set({ isLoading: false, error: null });
+        },
+
+        login: async (params) => {
             set({ isLoading: true, error: null });
             try {
                 switch (params.method) {
-                    case 'password':
+                    case "password":
                         await loginWithPassword(params);
                         break;
-                    case 'oauth':
+                    case "oauth":
                         await loginWithOauth(params);
                         break;
                     default:
-                        throw new Error('Invalid login method');
+                        throw new Error("Invalid login method");
                 }
 
                 set({ isLoading: false, error: null });
@@ -145,11 +187,11 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
             clearInterval(startProactiveTokenRefresh());
         },
 
-        createOrganisation: async (data: {
-            name: string;
-        }) => {
+        createOrganisation: async (data: { name: string }) => {
             try {
-                await pb.collection<OrganisationsRecord>(Collections.Organisations).create(data);
+                await pb
+                    .collection<OrganisationsRecord>(Collections.Organisations)
+                    .create(data);
             } catch {
                 set({ isLoading: false });
             }
@@ -157,14 +199,16 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
 
         refreshToken: async () => {
             try {
-                const authData = await pb.collection('users').authRefresh<UsersRecord>();
+                const authData = await pb
+                    .collection("users")
+                    .authRefresh<UsersRecord>();
                 set({
                     token: authData.token,
                     user: authData.record,
                     isAuthenticated: true,
                 });
             } catch (error) {
-                console.error('Token refresh failed:', error);
+                console.error("Token refresh failed:", error);
                 throw error;
             }
         },

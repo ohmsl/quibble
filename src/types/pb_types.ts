@@ -97,9 +97,9 @@ export type AssigneesRecord = {
 	id: string
 	member_id?: RecordIdString
 	org_id?: RecordIdString
+	owner_id?: RecordIdString
 	role_id?: RecordIdString
 	updated?: IsoDateString
-	user_id?: RecordIdString
 }
 
 export type EventsRecord = {
@@ -107,11 +107,11 @@ export type EventsRecord = {
 	date: IsoDateString
 	description?: string
 	id: string
-	org_id?: RecordIdString
+	org_id: RecordIdString
+	owner_id: RecordIdString
 	required_role_ids: RecordIdString[]
 	title: string
 	updated?: IsoDateString
-	user_id?: RecordIdString
 }
 
 export type MemberPreferencesRecord = {
@@ -122,9 +122,9 @@ export type MemberPreferencesRecord = {
 	member_id?: RecordIdString
 	min_gap_days?: number
 	org_id?: RecordIdString
+	owner_id?: RecordIdString
 	preferred_roles?: RecordIdString[]
 	updated?: IsoDateString
-	user_id?: RecordIdString
 }
 
 export type MembersRecord = {
@@ -132,16 +132,17 @@ export type MembersRecord = {
 	created?: IsoDateString
 	id: string
 	name?: string
-	org_id?: RecordIdString
+	org_id: RecordIdString
+	owner_id: RecordIdString
+	permission_level?: number
 	updated?: IsoDateString
-	user_id?: RecordIdString
 }
 
 export type OrganisationsRecord = {
 	created?: IsoDateString
 	id: string
 	name?: string
-	owner_id?: RecordIdString
+	owner_id: RecordIdString
 	updated?: IsoDateString
 }
 
@@ -154,8 +155,8 @@ export type RolesRecord = {
 	minAssignments?: number
 	name: string
 	org_id?: RecordIdString
+	owner_id?: RecordIdString
 	updated?: IsoDateString
-	user_id?: RecordIdString
 }
 
 export type UsersRecord = {
@@ -167,7 +168,6 @@ export type UsersRecord = {
 	name?: string
 	org_ids?: RecordIdString[]
 	password: string
-	permission_level?: number
 	tokenKey: string
 	updated?: IsoDateString
 	verified?: boolean

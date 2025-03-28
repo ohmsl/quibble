@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	pbApp := pocketbase.New()
+	app := pocketbase.New()
 
-	pbApp.OnServe().BindFunc(func(se *core.ServeEvent) error {
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.GET("/hello", func(e *core.RequestEvent) error {
 			name := e.Request.PathValue("name")
 
@@ -21,7 +21,7 @@ func main() {
 		return se.Next()
 	})
 
-	pbApp.OnBootstrap().BindFunc(func(e *core.BootstrapEvent) error {
+	app.OnBootstrap().BindFunc(func(e *core.BootstrapEvent) error {
 		err := e.Next()
 		if err != nil {
 			return err
@@ -32,7 +32,56 @@ func main() {
 		return nil
 	})
 
-	pbApp.OnRecordCreateRequest("*").BindFunc(func(e *core.RecordRequestEvent) error {
+	app.OnRecordCreate("organisations").BindFunc(func(e *core.RecordEvent) error {
+		e.Next()
+
+		record := e.Record
+		userId := record.GetString("owner_id")
+
+		if userId != "" {
+			// get the user and update their org_ids with the new organisation
+			user, err := app.FindRecordById("users", userId)
+			if err != nil {
+				log.Printf("Error finding user %s: %v", userId, err)
+				return err
+			}
+
+			user.Set("org_ids", append(user.GetStringSlice("org_ids"), record.Id))
+
+			err = app.Save(user)
+			if err != nil {
+				log.Printf("Error saving user %s: %v", userId, err)
+				return err
+			}
+
+			// add this user as an "owner" member of the organisation
+			membersCol, err := app.FindCollectionByNameOrId("members")
+			if err != nil {
+				log.Printf("Error finding collection members: %v", err)
+				return err
+			}
+
+			member := core.NewRecord(membersCol)
+
+			member.Set("name", user.GetString("name"))
+			member.Set("active", true)
+			member.Set("permission_level", 4)
+
+			member.Set("owner_id", userId)
+			member.Set("user_id", userId)
+			member.Set("org_id", record.Id)
+
+			err = app.Save(member)
+			if err != nil {
+				log.Printf("Error creating member for user %s in organisation %s: %v", userId, record.Id, err)
+				return err
+			}
+
+		}
+		return nil
+	})
+
+	app.OnRecordCreateRequest().BindFunc(func(e *core.RecordRequestEvent) error {
 		auth := e.Auth
 		if auth != nil {
 			userId := auth.Id
@@ -40,9 +89,9 @@ func main() {
 
 			collection := e.Record.Collection()
 
-			userIdField := collection.Fields.GetByName("user_id")
+			userIdField := collection.Fields.GetByName("owner_id")
 			if userIdField != nil {
-				e.Record.Set("user_id", userId)
+				e.Record.Set("owner_id", userId)
 			}
 
 			orgIdField := collection.Fields.GetByName("org_id")
@@ -50,11 +99,11 @@ func main() {
 				e.Record.Set("org_id", orgId)
 			}
 		}
-		return nil
+		return e.Next()
 	})
 
 	// Must start PocketBase before doing any queries
-	err := pbApp.Start()
+	err := app.Start()
 	if err != nil {
 		log.Fatalf("Failed to start PocketBase: %v", err)
 	}
