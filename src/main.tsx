@@ -7,14 +7,15 @@ import { AuthLayout } from './layouts/AuthLayout';
 import { Layout } from './layouts/Layout';
 import { PageLayout } from './layouts/PageLayout';
 import theme from './theme/theme';
-import { RolesView } from './views/RolesView';
-import { ScheduleView } from './views/ScheduleView';
-import { MeetingSettingsView } from './views/Settings/MeetingSettingsView';
-import { SettingsView } from './views/Settings/SettingsView';
+import { NotFound } from './views/404';
 import { LoginView } from './views/auth/LoginView';
 import { RegisterOrganisationView } from './views/auth/RegisterOrganisationView';
 import { RegisterView } from './views/auth/RegisterView';
 import { ThemePreviewView } from './views/developer/ThemePreviewView';
+import { RolesView } from './views/RolesView';
+import { ScheduleView } from './views/ScheduleView';
+import { MeetingSettingsView } from './views/settings/MeetingSettingsView';
+import { SettingsView } from './views/settings/SettingsView';
 
 createRoot(document.getElementById('root') as HTMLElement).render(
     <ThemeProvider theme={theme}>
@@ -38,6 +39,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
                             <Route path="/settings/meetings" element={<MeetingSettingsView />} />
                             <Route path="/developer/theme-preview" element={<ThemePreviewView />} />
                         </Route>
+                        <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
             </AnimatePresence>

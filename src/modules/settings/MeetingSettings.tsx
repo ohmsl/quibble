@@ -1,6 +1,6 @@
 import { Box, Grid2 as Grid, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { ChevronLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon } from 'lucide-react';
 import { CheckButton } from '../../components/CheckButton';
 import { useAppState } from '../../modules/state/useAppState';
 
@@ -43,7 +43,7 @@ export const MeetingSettings = () => {
         <>
             <Stack direction="row" spacing={2} alignItems="center" mb={3}>
                 <IconButton>
-                    <ChevronLeftIcon />
+                    <ArrowLeftIcon />
                 </IconButton>
                 <Box>
                     <Typography variant="h5">Meeting Settings</Typography>
