@@ -1,16 +1,6 @@
-import PocketBase from 'pocketbase';
+import PocketBase from "pocketbase";
+import { TypedPocketBase } from "../../types/pb_types";
 
-const pb: PocketBase = new PocketBase('http://localhost:8090');
+const pb = new PocketBase("http://localhost:8090") as TypedPocketBase;
 
-// async function loginAsAdmin() {
-//     try {
-//         await pb
-//             .collection("_superusers")
-//             .authWithPassword("ohmslater@outlook.com", "test1234");
-//     } catch (error) {
-//         console.error("Failed to login as admin", error);
-//     }
-// }
-
-// loginAsAdmin();
 export default pb;

@@ -7,11 +7,11 @@ import {
 } from "../../../types/auth/LoginParams";
 import {
     Collections,
-    MembersRecord,
     OrganisationsRecord,
     UsersRecord,
 } from "../../../types/pb_types";
 import pb from "../../pocketbase/pb";
+import { getLatestUserRecord } from "../../auth/getLatestUserRecord";
 
 export interface AuthSlice {
     isAuthenticated: boolean;
@@ -36,6 +36,8 @@ export interface AuthSlice {
     logout: () => void;
     refreshToken: () => Promise<void>;
     refreshAuthState: () => void;
+    /** Syncs the user record with the server.*/
+    syncUserWithServer: () => Promise<void>;
 }
 
 const fiveMinutesInMs = 5 * 60 * 1000;
@@ -171,6 +173,8 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
                         throw new Error("Invalid login method");
                 }
 
+                await get().syncUserWithServer();
+
                 set({ isLoading: false, error: null });
             } catch (error) {
                 set({
@@ -208,6 +212,7 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
                     isAuthenticated: true,
                 });
             } catch (error) {
+                pb.authStore.clear();
                 console.error("Token refresh failed:", error);
                 throw error;
             }
@@ -215,6 +220,26 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
 
         refreshAuthState: () => {
             initializeAuthState();
+        },
+
+        syncUserWithServer: async () => {
+            try {
+                const freshUser = await getLatestUserRecord();
+
+                if (!freshUser) {
+                    set({ user: null, token: null, isAuthenticated: false });
+                    clearInterval(startProactiveTokenRefresh());
+                    return;
+                }
+
+                set({
+                    user: freshUser,
+                    isAuthenticated: true,
+                });
+            } catch (error) {
+                pb.authStore.clear();
+                console.error("Failed to get latest user record", error);
+            }
         },
     };
 };

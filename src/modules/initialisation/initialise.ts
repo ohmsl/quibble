@@ -1,5 +1,6 @@
 import { createScopedLogger } from "../../utils/logger";
 import { getUser } from "../auth/getUser";
+import { usePbStore } from "../state/pocketbase/usePbStore";
 import { useAppState } from "../state/useAppState";
 import { hijackFetch } from "./routines/hijackFetch";
 import { subscribeToConnectionStatus } from "./routines/subscribeToConnectionStatus";
@@ -13,14 +14,20 @@ export const initialise = () => {
     const startTime = Date.now();
     logger.info("Initialising application...");
 
+    usePbStore.getState().syncUserWithServer();
+
     const { fetchEvents, fetchRoles, fetchMembers, fetchPreferences } =
         useAppState.getState();
 
-    if (getUser()) {
+    const user = getUser();
+
+    if (user) {
         fetchEvents();
         fetchRoles();
         fetchMembers();
         fetchPreferences();
+
+        useAppState.setState({ orgId: user.org_ids?.[0] });
     }
 
     const restoreFetch = hijackFetch();

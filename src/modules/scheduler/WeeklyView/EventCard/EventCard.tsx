@@ -13,7 +13,7 @@ import { ConfirmDialog } from "../../../../components/ConfirmDialog";
 import { useDialog } from "../../../../providers/DialogProvider";
 import { EventsRecord } from "../../../../types/pb_types";
 import {
-    type ProjectedMeetingEvent,
+    type ProjectedEvent,
     concretiseProjectedEvent,
 } from "../../../state/events/concretiseProjectedEvent";
 import { createSelectRoles } from "../../../state/roles/selectors/createSelectRoles";
@@ -36,8 +36,8 @@ export const EventCard = ({ event, onClose }: EventCardProps) => {
     const { showDialog, closeDialog } = useDialog();
 
     const handleEditSubmit = (data: EventFormValues) => {
-        if ((data as ProjectedMeetingEvent).projected) {
-            concretiseProjectedEvent(data as ProjectedMeetingEvent);
+        if ((data as ProjectedEvent).projected) {
+            concretiseProjectedEvent(data as ProjectedEvent);
         } else {
             updateEvent(event.id, data);
         }
@@ -94,8 +94,7 @@ export const EventCard = ({ event, onClose }: EventCardProps) => {
                                 onClick: handleDelete,
                                 icon: <Trash2Icon size={20} />,
                                 menuItemProps: { sx: { color: "error.main" } },
-                                disabled: (event as ProjectedMeetingEvent)
-                                    .projected,
+                                disabled: (event as ProjectedEvent).projected,
                             },
                         ]}
                     />

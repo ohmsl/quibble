@@ -85,18 +85,12 @@ func main() {
 		auth := e.Auth
 		if auth != nil {
 			userId := auth.Id
-			orgId := auth.GetString("org_id")
 
 			collection := e.Record.Collection()
 
 			userIdField := collection.Fields.GetByName("owner_id")
 			if userIdField != nil {
 				e.Record.Set("owner_id", userId)
-			}
-
-			orgIdField := collection.Fields.GetByName("org_id")
-			if orgIdField != nil {
-				e.Record.Set("org_id", orgId)
 			}
 		}
 		return e.Next()

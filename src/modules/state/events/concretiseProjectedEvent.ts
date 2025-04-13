@@ -1,10 +1,10 @@
-import type { EventsRecord } from '../../../types/Events/Event';
-import type { Role } from '../../../types/Role';
-import { useAppState } from '../useAppState';
+import { EventsRecord } from "../../../types/pb_types";
+import { useAppState } from "../useAppState";
 
-export type ProjectedMeetingEvent = EventsRecord & {
-    projected: true;
-};
+export type ProjectedEvent = Omit<
+    EventsRecord,
+    "id" | "user_id" | "org_id" | "owner_id" | "created" | "updated"
+> & { projected: true };
 
 /**
  * Concretises a projected event by converting it into a concrete event record.
@@ -15,15 +15,12 @@ export type ProjectedMeetingEvent = EventsRecord & {
  * @returns A new concrete meeting event that can be modified independently.
  * @throws Error if the event provided is not a projected event.
  */
-export function concretiseProjectedEvent(event: EventsRecord) {
-    if (!(event as ProjectedMeetingEvent).projected) {
-        throw new Error('The event is not projected and does not require concretisation.');
+export function concretiseProjectedEvent(event: ProjectedEvent) {
+    if (!event.projected) {
+        throw new Error(
+            "The event is not projected and does not require concretisation.",
+        );
     }
 
-    useAppState.getState().addEvent({
-        title: event.title,
-        description: event.description,
-        date: event.date,
-        required_role_ids: event.requiredRoles.map((role: Role) => role.id),
-    });
+    useAppState.getState().addEvent(event);
 }
