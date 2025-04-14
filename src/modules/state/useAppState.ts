@@ -32,6 +32,7 @@ export const useAppState = createSelectors(
                         if (!state) return;
                     }
                 },
+                partialize: state => Object.fromEntries(Object.entries(state).filter(([key]) => !['initialised'].includes(key))),
             },
         ),
     ),

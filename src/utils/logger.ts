@@ -5,7 +5,7 @@ const chalk = new Chalk({ level: 3 });
 
 type LoggerFunction = (...messages: any[]) => void;
 
-interface Logger {
+export interface Logger {
     trace: LoggerFunction;
     debug: LoggerFunction;
     info: LoggerFunction;

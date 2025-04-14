@@ -1,10 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
-import { AuthRecord } from 'pocketbase';
 import type { StateCreator } from 'zustand';
 import { LoginParams, OauthLoginParams, PasswordLoginParams } from '../../../types/auth/LoginParams';
 import { Collections, OrganisationsRecord, UsersRecord } from '../../../types/pb_types';
-import { logger } from '../../../utils/logger';
-import { getLatestUserRecord } from '../../auth/getLatestUserRecord';
 import pb from '../../pocketbase/pb';
 
 export interface AuthSlice {
@@ -30,7 +27,6 @@ export interface AuthSlice {
     logout: () => void;
     refreshToken: () => Promise<void>;
     refreshAuthState: () => void;
-    syncUserWithServer: () => Promise<void>;
 }
 
 const fiveMinutesInMs = 5 * 60 * 1000;
@@ -197,33 +193,6 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
 
         refreshAuthState: () => {
             initializeAuthState();
-        },
-
-        syncUserWithServer: async () => {
-            try {
-                const freshUser = await getLatestUserRecord();
-                logger.info('Fresh user: ');
-                console.log(freshUser);
-
-                if (!freshUser) {
-                    set({ user: null, token: null, isAuthenticated: false });
-                    clearInterval(startProactiveTokenRefresh());
-                    return;
-                }
-
-                set({
-                    user: freshUser,
-                    isAuthenticated: true,
-                });
-
-                const token = get().token;
-                if (token) {
-                    pb.authStore.save(token, freshUser as AuthRecord);
-                }
-            } catch (error) {
-                pb.authStore.clear();
-                console.error('Failed to get latest user record', error);
-            }
         },
     };
 };

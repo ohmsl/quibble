@@ -1,12 +1,13 @@
-import { StateCreator } from "zustand";
+import { StateCreator } from 'zustand';
 
 /**
  * Represents the application state.
  */
 export type AppSlice = {
     orgId: string | null;
-    connectionStatus: "online" | "unavailable" | "offline" | null;
+    connectionStatus: 'online' | 'unavailable' | 'offline' | null;
     loading: boolean;
+    initialised: boolean;
 };
 
 /**
@@ -22,6 +23,7 @@ export const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = () => {
         orgId: null,
         connectionStatus: null,
         loading: false,
+        initialised: false,
     };
 
     return initialState;
