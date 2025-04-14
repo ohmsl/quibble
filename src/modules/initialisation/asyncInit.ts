@@ -40,9 +40,7 @@ export const asyncInit = async (startTime: number, navigate: NavigateFunction) =
     else if (loggedIn && !hasOrg) targetRoute = '/register/organisation';
     else targetRoute = '/schedule';
 
-    const shouldOverridePath = !loggedIn;
-
-    if (location.pathname.length === 1 || shouldOverridePath) {
+    if (location.pathname.length === 1 || !loggedIn || (loggedIn && location.pathname.includes('login'))) {
         navigate(targetRoute, { replace: true });
     }
 

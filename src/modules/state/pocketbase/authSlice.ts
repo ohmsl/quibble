@@ -150,8 +150,6 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set, get) => {
                         throw new Error('Invalid login method');
                 }
 
-                await get().syncUserWithServer();
-
                 set({ isLoading: false, error: null });
             } catch (error) {
                 set({
