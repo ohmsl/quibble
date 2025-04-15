@@ -16,7 +16,7 @@ export const colorSchemes: ColorSchemes = {
             divider: 'rgba(20, 20, 20, 0.1)',
             primary: theme.palette.augmentColor({
                 color: {
-                    main: '#3463FF',
+                    main: '#007AFF',
                 },
             }),
             secondary: theme.palette.augmentColor({
@@ -66,8 +66,8 @@ export const colorSchemes: ColorSchemes = {
             divider: 'rgba(255, 255, 255, 0.05)',
             primary: augmentColor({
                 color: {
-                    main: 'hsl(226deg, 100%, 60%)',
-                    dark: 'hsl(226deg, 100%, 6%)',
+                    main: '#007AFF',
+                    dark: 'hsl(211deg, 100%, 6%)',
                     contrastText: '#fff',
                 },
             }),

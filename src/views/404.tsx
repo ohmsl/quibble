@@ -1,8 +1,14 @@
 import { Box, Button, Typography } from '@mui/material';
-import { ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon, HomeIcon } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 export const NotFound = () => {
+    const navigate = useNavigate();
+
     const handleBack = () => window.history.back();
+    const handleHome = () => navigate('/');
+
+    const canGoBack = window.history.length > 1;
 
     return (
         <>
@@ -20,9 +26,15 @@ export const NotFound = () => {
                 <Typography>
                     Oops! Page not found <code>¯\_(ツ)_/¯</code>
                 </Typography>
-                <Button variant="contained" sx={{ mt: 2 }} onClick={handleBack} startIcon={<ArrowLeftIcon size={20} />}>
-                    Go Back
-                </Button>
+                {canGoBack ? (
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={handleBack} startIcon={<ArrowLeftIcon size={20} />}>
+                        Go Back
+                    </Button>
+                ) : (
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={handleHome} startIcon={<HomeIcon size={20} />}>
+                        Go Home
+                    </Button>
+                )}
             </Box>
         </>
     );

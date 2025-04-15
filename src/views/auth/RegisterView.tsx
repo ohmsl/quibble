@@ -91,10 +91,6 @@ export const RegisterView = () => {
                     Forgot password?
                 </Link>
 
-                <Button color="warning" variant="contained" onClick={() => navigate('/register/organisation')}>
-                    Skip
-                </Button>
-
                 <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} disabled={disabled}>
                     {isLoading ? <CircularProgress size={24} /> : 'Register'}
                 </Button>
