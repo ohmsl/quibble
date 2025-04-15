@@ -1,10 +1,7 @@
-import { Box, Button, Typography, useTheme } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { ArrowLeftIcon } from 'lucide-react';
 
 export const NotFound = () => {
-    const theme = useTheme();
-    console.log(theme.palette);
-
     const handleBack = () => window.history.back();
 
     return (
