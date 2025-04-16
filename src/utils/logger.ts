@@ -44,24 +44,12 @@ function setLevel(level: DebugLevel) {
     currentLevel = level;
 }
 
-function log(level: DebugLevel, scope: string | undefined, messages: any[]) {
+function log(level: DebugLevel, scope: string | undefined, messages: unknown[]): void {
     const levelOrder: DebugLevel[] = ['trace', 'debug', 'info', 'warn', 'error'];
 
     if (levelOrder.indexOf(level) < levelOrder.indexOf(currentLevel)) {
         return;
     }
-
-    const allMessages = messages.reduce((acc, current) => {
-        if (acc.endsWith('\n')) {
-            return acc + current;
-        }
-
-        if (!acc) {
-            return current;
-        }
-
-        return `${acc} ${current}`;
-    }, '');
 
     const labelBackgroundColor = getColorForLevel(level);
     const labelTextColor = level === 'warn' ? '#000000' : '#FFFFFF';
@@ -69,22 +57,24 @@ function log(level: DebugLevel, scope: string | undefined, messages: any[]) {
     const labelStyles = getLabelStyles(labelBackgroundColor, labelTextColor);
     const scopeStyles = getLabelStyles('#77828D', 'white');
 
-    const styles = [labelStyles];
+    const parts: string[] = [];
+    const styles: string[] = [];
 
-    if (typeof scope === 'string') {
-        styles.push('', scopeStyles);
-    }
-
-    let labelText = formatText(` ${level.toUpperCase()} `, labelTextColor, labelBackgroundColor);
+    parts.push(`%c ${level.toUpperCase()} `);
+    styles.push(labelStyles);
 
     if (scope) {
-        labelText = `${labelText} ${formatText(` ${scope} `, '#FFFFFF', '77828D')}`;
+        parts.push(`%c ${scope} `);
+        styles.push(scopeStyles);
     }
 
     if (typeof window !== 'undefined') {
-        console.log(`%c${level.toUpperCase()}${scope ? `%c %c${scope}` : ''}`, ...styles, allMessages);
+        console.log(parts.join(' '), ...styles, ...messages);
     } else {
-        console.log(`${labelText}`, allMessages);
+        const prefix = scope
+            ? `${formatText(` ${level.toUpperCase()} `, labelTextColor, labelBackgroundColor)} ${formatText(` ${scope} `, '#FFFFFF', '#77828D')}`
+            : `${formatText(` ${level.toUpperCase()} `, labelTextColor, labelBackgroundColor)}`;
+        console.log(prefix, ...messages);
     }
 }
 

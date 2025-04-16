@@ -16,7 +16,7 @@ const config = [
     {
         label: 'Brothers',
         icon: <UsersIcon size={20} />,
-        path: '/brothers',
+        path: '/members',
     },
     {
         label: 'Roles',
@@ -55,7 +55,9 @@ export const Navbar = () => {
                             startIcon={item.icon}
                             color="inherit"
                             onClick={() => navigate(item.path, { viewTransition: true })}
-                            sx={{ bgcolor: location.pathname === item.path ? 'action.hover' : 'transparent' }}
+                            sx={{
+                                color: location.pathname === item.path ? 'info.main' : 'text.primary',
+                            }}
                         >
                             {item.label}
                         </Button>
