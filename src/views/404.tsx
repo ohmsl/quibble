@@ -27,11 +27,11 @@ export const NotFound = () => {
                     Oops! Page not found <code>¯\_(ツ)_/¯</code>
                 </Typography>
                 {canGoBack ? (
-                    <Button variant="contained" sx={{ mt: 2 }} onClick={handleBack} startIcon={<ArrowLeftIcon size={20} />}>
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={handleBack} startIcon={<ArrowLeftIcon />}>
                         Go Back
                     </Button>
                 ) : (
-                    <Button variant="contained" sx={{ mt: 2 }} onClick={handleHome} startIcon={<HomeIcon size={20} />}>
+                    <Button variant="contained" sx={{ mt: 2 }} onClick={handleHome} startIcon={<HomeIcon />}>
                         Go Home
                     </Button>
                 )}

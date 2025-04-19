@@ -31,14 +31,14 @@ export const RolesToolbar = () => {
                     input: {
                         endAdornment: (
                             <InputAdornment position="end">
-                                <SearchIcon size={20} />
+                                <SearchIcon />
                             </InputAdornment>
                         ),
                     },
                 }}
             />
 
-            <Button startIcon={<PlusIcon size={20} />} variant="contained" color="primary" onClick={handleCreateRole}>
+            <Button startIcon={<PlusIcon />} variant="contained" color="primary" onClick={handleCreateRole}>
                 Create Role
             </Button>
         </Toolbar>

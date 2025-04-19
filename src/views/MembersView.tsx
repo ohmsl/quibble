@@ -1,10 +1,10 @@
-import { Typography } from '@mui/material';
 import { MembersList } from '../modules/members/MembersList';
+import { MembersToolbar } from '../modules/members/MembersToolbar';
 
 export const MembersView = () => {
     return (
         <>
-            <Typography variant="h5">Members</Typography>
+            <MembersToolbar />
             <MembersList />
         </>
     );

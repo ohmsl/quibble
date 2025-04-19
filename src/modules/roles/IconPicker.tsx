@@ -1,16 +1,9 @@
-import {
-    Box,
-    IconButton,
-    InputAdornment,
-    Stack,
-    TextField,
-    Tooltip,
-} from "@mui/material";
-import Fuse from "fuse.js";
-import { SearchIcon, XIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { AutoSizer, List } from "react-virtualized";
-import { roleIconMap } from "./roleIcons";
+import { Box, IconButton, InputAdornment, Stack, TextField, Tooltip } from '@mui/material';
+import Fuse from 'fuse.js';
+import { SearchIcon, XIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { AutoSizer, List } from 'react-virtualized';
+import { roleIconMap } from './roleIcons';
 
 const ICON_SIZE = 48;
 
@@ -24,18 +17,18 @@ export const IconPicker = ({ icons, onChange, value }: Props) => {
     const fuse = useMemo(
         () =>
             new Fuse(icons, {
-                keys: ["name"],
+                keys: ['name'],
                 threshold: 0.3,
                 distance: 100,
             }),
         [icons],
     );
 
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState('');
 
     const filteredIcons = useMemo(() => {
         if (!searchTerm) return icons;
-        return fuse.search(searchTerm).map((result) => result.item);
+        return fuse.search(searchTerm).map(result => result.item);
     }, [searchTerm]);
 
     return (
@@ -43,21 +36,18 @@ export const IconPicker = ({ icons, onChange, value }: Props) => {
             <TextField
                 placeholder="Search icons..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 sx={{ mb: 1 }}
                 slotProps={{
                     input: {
                         endAdornment: (
                             <InputAdornment position="end">
                                 {searchTerm.length > 0 ? (
-                                    <IconButton
-                                        onClick={() => setSearchTerm("")}
-                                        size="small"
-                                    >
-                                        <XIcon size={20} />
+                                    <IconButton onClick={() => setSearchTerm('')} size="small">
+                                        <XIcon />
                                     </IconButton>
                                 ) : (
-                                    <SearchIcon size={20} />
+                                    <SearchIcon />
                                 )}
                             </InputAdornment>
                         ),
@@ -71,15 +61,10 @@ export const IconPicker = ({ icons, onChange, value }: Props) => {
                 <AutoSizer>
                     {({ width, height }) => {
                         // Calculate how many icons fit per row
-                        const iconsPerRow = Math.max(
-                            1,
-                            Math.floor(width / ICON_SIZE),
-                        );
+                        const iconsPerRow = Math.max(1, Math.floor(width / ICON_SIZE));
 
                         // Calculate rows needed
-                        const rowCount = Math.ceil(
-                            filteredIcons.length / iconsPerRow,
-                        );
+                        const rowCount = Math.ceil(filteredIcons.length / iconsPerRow);
 
                         const rowRenderer = ({
                             index,
@@ -91,14 +76,8 @@ export const IconPicker = ({ icons, onChange, value }: Props) => {
                             style: React.CSSProperties;
                         }) => {
                             const startIndex = index * iconsPerRow;
-                            const endIndex = Math.min(
-                                startIndex + iconsPerRow,
-                                filteredIcons.length,
-                            );
-                            const rowIcons = filteredIcons.slice(
-                                startIndex,
-                                endIndex,
-                            );
+                            const endIndex = Math.min(startIndex + iconsPerRow, filteredIcons.length);
+                            const rowIcons = filteredIcons.slice(startIndex, endIndex);
 
                             // Calculate space distribution for this row
                             // If the row is full, we use the standard size
@@ -110,38 +89,23 @@ export const IconPicker = ({ icons, onChange, value }: Props) => {
                                     key={key}
                                     style={{
                                         ...style,
-                                        display: "flex",
-                                        justifyContent:
-                                            actualIconsInRow < iconsPerRow
-                                                ? "flex-start"
-                                                : "space-around",
+                                        display: 'flex',
+                                        justifyContent: actualIconsInRow < iconsPerRow ? 'flex-start' : 'space-around',
                                     }}
                                 >
                                     {rowIcons.map(({ name, Icon }, i) => (
                                         <Box
                                             key={i}
                                             sx={{
-                                                width:
-                                                    actualIconsInRow <
-                                                    iconsPerRow
-                                                        ? ICON_SIZE
-                                                        : width / iconsPerRow,
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                color: "text.primary",
+                                                width: actualIconsInRow < iconsPerRow ? ICON_SIZE : width / iconsPerRow,
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                color: 'text.primary',
                                             }}
                                         >
-                                            <Tooltip
-                                                title={name
-                                                    .replace(/([A-Z])/g, " $1")
-                                                    .trim()}
-                                            >
+                                            <Tooltip title={name.replace(/([A-Z])/g, ' $1').trim()}>
                                                 <IconButton
-                                                    color={
-                                                        value === name
-                                                            ? "primary"
-                                                            : "inherit"
-                                                    }
+                                                    color={value === name ? 'primary' : 'inherit'}
                                                     onClick={() => {
                                                         onChange(name);
                                                     }}

@@ -1,5 +1,7 @@
 import { Button, Paper, Stack, ToggleButton, ToggleButtonGroup, Toolbar } from '@mui/material';
 import { DownloadIcon, PlusIcon, Sparkles as SparklesIcon } from 'lucide-react';
+import { ActionMenu } from '../../components/ActionMenu';
+import useIsSmallScreen from '../../hooks/useIsSmallScreen';
 import { useDialog } from '../../providers/DialogProvider';
 import { useAppState } from '../state/useAppState';
 import { EventForm, type EventFormValues } from './WeeklyView/EventForm';
@@ -26,6 +28,8 @@ export const SchedulerToolbar = ({ viewMode, setViewMode }: Props) => {
         showDialog(<EventForm onCancel={closeDialog} onSubmit={handleSubmitEvent} />, { fullWidth: true });
     };
 
+    const isSmallScreen = useIsSmallScreen();
+
     return (
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
             <Paper variant="outlined" sx={{ width: 'fit-content' }}>
@@ -39,15 +43,37 @@ export const SchedulerToolbar = ({ viewMode, setViewMode }: Props) => {
                 </ToggleButtonGroup>
             </Paper>
             <Stack direction="row" spacing={1}>
-                <Button startIcon={<SparklesIcon size={20} />} variant="outlined" color="neutral">
-                    Auto Assign
-                </Button>
-                <Button startIcon={<DownloadIcon size={20} />} variant="outlined" color="neutral">
-                    Export
-                </Button>
-                <Button startIcon={<PlusIcon size={20} />} variant="contained" onClick={handleAddEvent}>
-                    Add Event
-                </Button>
+                {!isSmallScreen ? (
+                    <>
+                        <Button startIcon={<SparklesIcon />} variant="outlined" color="neutral">
+                            Auto Assign
+                        </Button>
+                        <Button startIcon={<DownloadIcon />} variant="outlined" color="neutral">
+                            Export
+                        </Button>
+                        <Button startIcon={<PlusIcon />} variant="contained" onClick={handleAddEvent}>
+                            Add Event
+                        </Button>
+                    </>
+                ) : (
+                    <ActionMenu
+                        actions={[
+                            {
+                                label: 'Add Event',
+                                icon: <PlusIcon />,
+                                onClick: handleAddEvent,
+                            },
+                            {
+                                label: 'Auto Assign',
+                                icon: <SparklesIcon />,
+                            },
+                            {
+                                label: 'Export',
+                                icon: <DownloadIcon />,
+                            },
+                        ]}
+                    />
+                )}
             </Stack>
         </Toolbar>
     );

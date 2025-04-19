@@ -71,12 +71,12 @@ export const EventCard = ({ event, onClose }: EventCardProps) => {
                             {
                                 label: 'Edit',
                                 onClick: handleEdit,
-                                icon: <EditIcon size={20} />,
+                                icon: <EditIcon />,
                             },
                             {
                                 label: 'Delete',
                                 onClick: handleDelete,
-                                icon: <Trash2Icon size={20} />,
+                                icon: <Trash2Icon />,
                                 menuItemProps: { sx: { color: 'error.main' } },
                                 disabled: (event as ProjectedEvent).projected,
                             },
