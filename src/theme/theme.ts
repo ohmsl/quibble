@@ -40,7 +40,7 @@ const theme = responsiveFontSizes(
                     body: {
                         background: alpha(theme.palette.background.default, 0.8),
                     },
-                    '.lucide': {
+                    'svg.lucide[width="24"][height="24"]': {
                         width: 20,
                         height: 20,
                     },

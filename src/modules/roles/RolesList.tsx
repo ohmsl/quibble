@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemIcon, ListItemText, Paper, Stack } from '@mui/material';
 import { CircleHelpIcon, EditIcon, Trash2Icon } from 'lucide-react';
 import { ActionMenu } from '../../components/ActionMenu';
-import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { ConfirmPrompt } from '../../components/ConfirmPrompt';
 import { useDialog } from '../../providers/DialogProvider';
 import type { Role } from '../../types/Role';
 import { useAppState } from '../state/useAppState';
@@ -31,7 +31,7 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
 
     const handleRemove = (role: Role) => {
         showDialog(
-            <ConfirmDialog
+            <ConfirmPrompt
                 title="Remove Role"
                 message={`Are you sure you want to remove the role "${role.name}"?`}
                 onClose={closeDialog}
@@ -40,7 +40,7 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
                     closeDialog();
                 }}
                 confirmButton={{ text: 'Remove', color: 'error' }}
-                cancelButton={{ text: 'Cancel', color: 'info' }}
+                cancelButton={{ text: 'Cancel' }}
             />,
         );
     };

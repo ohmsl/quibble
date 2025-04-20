@@ -45,7 +45,21 @@ export const ActionMenu: React.FC<Props> = ({ actions, slotProps = {}, children 
             <IconButton onClick={handleClick} {...slotProps.iconButton}>
                 {children ? children : <MoreVertical />}
             </IconButton>
-            <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} sx={{ minWidth: 200 }} {...slotProps.popover}>
+            <Popover
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                sx={{ minWidth: 200 }}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                {...slotProps.popover}
+            >
                 <MenuList
                     sx={{
                         p: 0.5,

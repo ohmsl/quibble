@@ -6,8 +6,8 @@ import { useAppState } from '../modules/state/useAppState';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     position: 'fixed',
-    top: 8,
-    right: 8,
+    top: 10,
+    right: 10,
     '@keyframes pulse': {
         '0%': {
             boxShadow: '0 0 0 0 rgba(76, 175, 80, 0.7)',

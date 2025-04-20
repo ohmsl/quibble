@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, List, Stack, Typography } from '@mui/mat
 import { format } from 'date-fns';
 import { EditIcon, Trash2Icon } from 'lucide-react';
 import { ActionMenu } from '../../../../components/ActionMenu';
-import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { ConfirmPrompt } from '../../../../components/ConfirmPrompt';
 import { useDialog } from '../../../../providers/DialogProvider';
 import { EventsRecord } from '../../../../types/pb_types';
 import { type ProjectedEvent, concretiseProjectedEvent } from '../../../state/events/concretiseProjectedEvent';
@@ -43,7 +43,7 @@ export const EventCard = ({ event, onClose }: EventCardProps) => {
 
     const handleDelete = () => {
         showDialog(
-            <ConfirmDialog
+            <ConfirmPrompt
                 title="Delete Event"
                 message="Are you sure you want to delete this event?"
                 onConfirm={() => {

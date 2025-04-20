@@ -8,6 +8,12 @@ export const navigationCustomisations: Components<Theme> = {
         },
     },
 
+    MuiPopover: {
+        defaultProps: {
+            TransitionComponent: Fade,
+        },
+    },
+
     MuiMenu: {
         defaultProps: {
             TransitionComponent: Fade,
