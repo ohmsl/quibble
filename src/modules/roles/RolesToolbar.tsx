@@ -22,7 +22,7 @@ export const RolesToolbar = () => {
     };
 
     return (
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between', gap: 1 }}>
             <TextField
                 label="Search"
                 variant="outlined"
@@ -38,7 +38,7 @@ export const RolesToolbar = () => {
                 }}
             />
 
-            <Button startIcon={<PlusIcon />} variant="contained" color="primary" onClick={handleCreateRole}>
+            <Button startIcon={<PlusIcon />} variant="contained" onClick={handleCreateRole} sx={{ textWrap: 'nowrap' }}>
                 Create Role
             </Button>
         </Toolbar>

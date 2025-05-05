@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useState } from 'react';
 import { MonthlyView } from '../modules/scheduler/MonthlyView/MonthlyView';
 import { SchedulerToolbar } from '../modules/scheduler/SchedulerToolbar';
@@ -9,8 +9,6 @@ export const ScheduleView = () => {
 
     return (
         <Stack spacing={1}>
-            <Typography variant="h5">Meeting Schedule</Typography>
-
             <SchedulerToolbar viewMode={viewMode} setViewMode={setViewMode} />
             {viewMode === 'weekly' && <WeeklyView />}
             {viewMode === 'monthly' && <MonthlyView />}

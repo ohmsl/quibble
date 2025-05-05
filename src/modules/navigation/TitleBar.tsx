@@ -10,6 +10,8 @@ export const TitleBar = () => {
 
     const { openDrawer } = useDrawer();
 
+    const title = navConfig.find(item => item.path === location.pathname)?.label || 'Unknown';
+
     return (
         <AppBar
             position="static"
@@ -37,7 +39,7 @@ export const TitleBar = () => {
                             zIndex: theme.zIndex.appBar,
                         }}
                     >
-                        {navConfig.find(item => item.path === location.pathname)?.label || ''}
+                        {title}
                     </Typography>
                 </>
             </Toolbar>
