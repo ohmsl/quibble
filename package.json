@@ -5,11 +5,12 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "server": "cd ./server && go run cmd/main.go serve",
+        "server": "cd ./server && go run cmd/main.go serve --http=\"192.168.50.29:8090\"",
         "build": "tsc && vite build",
         "typegen": "pocketbase-typegen --db ./server/pb_data/data.db --out ./src/types/pb_types.ts",
         "preview": "vite preview",
-        "tauri": "tauri"
+        "tauri": "tauri",
+        "icons": "tauri icon ./public/light_macos.svg -o ./src-tauri/icons/macos && tauri icon ./public/light.svg -o ./src-tauri/icons"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",

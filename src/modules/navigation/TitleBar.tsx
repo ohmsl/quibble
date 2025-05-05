@@ -11,7 +11,10 @@ export const TitleBar = () => {
     const { openDrawer } = useDrawer();
 
     return (
-        <AppBar position="static" sx={{ boxShadow: 1 }}>
+        <AppBar
+            position="static"
+            sx={{ boxShadow: 1, paddingTop: 'env(safe-area-inset-top)', marginTop: 'calc(-1 * env(safe-area-inset-top))' }}
+        >
             <Toolbar
                 sx={{
                     width: '100%',

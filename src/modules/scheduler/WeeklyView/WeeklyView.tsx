@@ -35,7 +35,7 @@ export const WeeklyView = () => {
     const events = useAppState(createSelectEventsForRange(weekStart, weekEnd));
 
     return (
-        <>
+        <Stack spacing={2}>
             <Paper
                 variant="outlined"
                 sx={{
@@ -69,6 +69,6 @@ export const WeeklyView = () => {
                 </Stack>
             </Paper>
             <Events rangeStart={weekStart} rangeEnd={weekEnd} />
-        </>
+        </Stack>
     );
 };
