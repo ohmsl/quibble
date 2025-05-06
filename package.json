@@ -10,7 +10,7 @@
         "typegen": "pocketbase-typegen --db ./server/pb_data/data.db --out ./src/types/pb_types.ts",
         "preview": "vite preview",
         "tauri": "tauri",
-        "icons": "tauri icon ./public/light_macos.svg -o ./src-tauri/icons/macos && tauri icon ./public/light.svg -o ./src-tauri/icons"
+        "icons": "tauri icon ./public/light.svg -o ./src-tauri/icons/ios/light && tauri icon ./public/tinted_ios.svg -o ./src-tauri/icons/ios/tinted --ios-color=#00000000 && tauri icon ./public/dark_ios.svg -o ./src-tauri/icons/ios/dark --ios-color=#00000000 && tauri icon ./public/light_macos.svg -o ./src-tauri/icons/macos/light && tauri icon ./public/dark_macos.svg -o ./src-tauri/icons/macos/dark && tauri icon ./public/light.svg -o ./src-tauri/icons/light && tauri icon ./public/dark.svg -o ./src-tauri/icons/dark"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
