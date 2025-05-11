@@ -4,7 +4,7 @@ import { App } from './App';
 import theme from './theme/theme';
 
 createRoot(document.getElementById('root') as HTMLElement).render(
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} noSsr>
         <CssBaseline />
         <App />
     </ThemeProvider>,

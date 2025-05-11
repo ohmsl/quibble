@@ -1,4 +1,4 @@
-import { Box, Grid2 as Grid, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
+import { Box, Grid, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { ArrowLeftIcon } from 'lucide-react';
 import { CheckButton } from '../../components/CheckButton';

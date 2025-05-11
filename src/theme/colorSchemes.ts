@@ -74,13 +74,12 @@ export const colorSchemes: ColorSchemes = {
             secondary: augmentColor({
                 color: {
                     main: 'hsl(0, 0%, 99%)',
-                    dark: '#000000',
+                    dark: 'hsl(0, 0%, 10%)',
                 },
             }),
             neutral: augmentColor({
                 color: {
-                    main: '#E2E2E2',
-
+                    main: '#000',
                     contrastText: '#000',
                 },
             }),

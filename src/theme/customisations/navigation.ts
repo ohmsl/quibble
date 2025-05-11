@@ -42,7 +42,6 @@ export const navigationCustomisations: Components<Theme> = {
         },
         styleOverrides: {
             root: {
-                background: 'red',
                 p: 1,
                 gap: 0.5,
                 display: 'flex',

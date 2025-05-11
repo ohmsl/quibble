@@ -1,4 +1,4 @@
-import { Grid2 as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { createSelectEventsForRange } from '../state/events/selectors/createSelectEventsForRange';
 import { useAppState } from '../state/useAppState';
 import { EventCard } from './WeeklyView/EventCard/EventCard';

@@ -1,3 +1,6 @@
+import CalendarViewMonthIcon from '@mui/icons-material/CalendarMonth';
+import GridViewIcon from '@mui/icons-material/GridViewRounded';
+import WeekViewIcon from '@mui/icons-material/ViewWeekRounded';
 import { Button, Paper, Stack, ToggleButton, ToggleButtonGroup, Toolbar } from '@mui/material';
 import { DownloadIcon, PlusIcon, Sparkles as SparklesIcon } from 'lucide-react';
 import { ActionMenu } from '../../components/ActionMenu';
@@ -8,7 +11,7 @@ import { EventForm, type EventFormValues } from './WeeklyView/EventForm';
 
 type Props = {
     viewMode: string;
-    setViewMode: (value: 'weekly' | 'monthly') => void;
+    setViewMode: (value: 'weekly' | 'monthly' | 'grid') => void;
 };
 
 export const SchedulerToolbar = ({ viewMode, setViewMode }: Props) => {
@@ -35,10 +38,13 @@ export const SchedulerToolbar = ({ viewMode, setViewMode }: Props) => {
             <Paper variant="outlined" sx={{ width: 'fit-content' }}>
                 <ToggleButtonGroup exclusive value={viewMode} onChange={handleViewModeChange}>
                     <ToggleButton size="small" value="weekly">
-                        Weekly View
+                        <WeekViewIcon />
                     </ToggleButton>
                     <ToggleButton size="small" value="monthly">
-                        Monthly View
+                        <CalendarViewMonthIcon />
+                    </ToggleButton>
+                    <ToggleButton size="small" value="grid">
+                        <GridViewIcon />
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Paper>

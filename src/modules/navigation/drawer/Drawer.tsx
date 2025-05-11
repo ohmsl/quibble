@@ -34,7 +34,7 @@ export const Drawer = () => {
             <SafeArea>
                 <Stack sx={{ width: 250, height: '100%' }}>
                     <Stack direction="row" spacing={2} alignItems="center" p={3} pb={2}>
-                        <CalendarHeartIcon size={32} color={theme.palette.primary.main} />
+                        <CalendarHeartIcon size={32} color={theme.vars.palette.primary.main} />
                     </Stack>
                     <MenuList sx={{ flex: 1 }} disablePadding>
                         {navConfig.map(({ icon, label, path }) => (
@@ -48,9 +48,16 @@ export const Drawer = () => {
                                     my: 0.5,
                                     borderRadius: `${theme.shape.borderRadius}px`,
                                     transition: 'background-color 0.3s ease-in-out, color 0.3s ease-in-out',
-                                    color: location.pathname.includes(path)
-                                        ? theme.palette.primary[theme.palette.mode === 'dark' ? 'light' : 'main']
-                                        : theme.palette.text.primary,
+                                    ...theme.applyStyles('dark', {
+                                        color: location.pathname.includes(path)
+                                            ? theme.vars.palette.primary.light
+                                            : theme.vars.palette.text.primary,
+                                    }),
+                                    ...theme.applyStyles('light', {
+                                        color: location.pathname.includes(path)
+                                            ? theme.vars.palette.primary.main
+                                            : theme.vars.palette.text.primary,
+                                    }),
                                 }}
                             >
                                 <Stack direction="row" spacing={2} alignItems="center">

@@ -1,4 +1,4 @@
-import { alpha, Components, darken, lighten, Theme, toggleButtonGroupClasses } from '@mui/material';
+import { Components, Theme, toggleButtonGroupClasses } from '@mui/material';
 
 export const inputCustomisations: Components<Theme> = {
     MuiButton: {
@@ -32,12 +32,13 @@ export const inputCustomisations: Components<Theme> = {
                         },
                         style: {
                             '&:hover': {
-                                backgroundColor: darken(
-                                    ownerState.color && ownerState.color !== 'inherit'
-                                        ? theme.palette[ownerState.color]?.main || theme.palette.primary.main
-                                        : theme.palette.primary.main,
-                                    theme.palette.mode === 'dark' ? 0.3 : 0.2,
-                                ),
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: `color-mix(in srgb, ${
+                                        ownerState.color && ownerState.color !== 'inherit'
+                                            ? theme.vars.palette[ownerState.color]?.main || theme.vars.palette.primary.main
+                                            : theme.vars.palette.primary.main
+                                    }, black 20%)`,
+                                }),
                             },
                         },
                     },
@@ -48,18 +49,27 @@ export const inputCustomisations: Components<Theme> = {
                         style: () => {
                             const paletteColor =
                                 ownerState.color && ownerState.color !== 'inherit'
-                                    ? theme.palette[ownerState.color] || theme.palette.primary
-                                    : theme.palette.primary;
-
-                            const mode = theme.palette.mode;
+                                    ? theme.vars.palette[ownerState.color] || theme.palette.primary
+                                    : theme.vars.palette.primary;
 
                             return {
-                                backgroundColor: mode === 'dark' ? paletteColor.dark : lighten(paletteColor.light, 0.8),
-                                color: mode === 'dark' ? paletteColor.main : paletteColor.dark,
-                                borderColor: lighten(paletteColor.dark, 0.2),
-                                '&:hover': {
-                                    borderColor: mode === 'dark' ? lighten(paletteColor.dark, 0.3) : lighten(paletteColor.light, 0.0),
-                                },
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: paletteColor.dark,
+                                    borderColor: paletteColor.light,
+                                    color: paletteColor.main,
+                                    '&:hover': {
+                                        borderColor: `color-mix(in srgb, ${paletteColor.light}, white 30%)`,
+                                    },
+                                }),
+
+                                ...theme.applyStyles('light', {
+                                    backgroundColor: `color-mix(in srgb, ${paletteColor.light}, white 80%)`,
+                                    borderColor: `color-mix(in srgb, ${paletteColor.light}, white 20%)`,
+                                    color: paletteColor.dark,
+                                    '&:hover': {
+                                        borderColor: paletteColor.light,
+                                    },
+                                }),
                             };
                         },
                     },
@@ -70,23 +80,21 @@ export const inputCustomisations: Components<Theme> = {
                         },
                         style: [
                             {
-                                color: theme.palette.grey[700],
-                                border: '1px solid',
-                                borderColor: theme.palette.divider,
-                                backgroundColor: theme.palette.background.paper,
+                                color: theme.vars.palette.grey[700],
+                                borderColor: theme.vars.palette.divider,
+                                backgroundColor: theme.vars.palette.background.paper,
                                 '&:hover': {
-                                    backgroundColor: darken(theme.palette.background.paper, 0.05),
-                                    borderColor: alpha(theme.palette.divider, 0.2),
+                                    backgroundColor: `color-mix(in srgb, ${theme.vars.palette.background.paper}, black 5%)`,
+                                    borderColor: `color-mix(in srgb, ${theme.vars.palette.divider}, transparent 20%)`,
                                 },
                             },
                             theme.applyStyles('dark', {
-                                color: theme.palette.grey[50],
-                                border: '1px solid',
-                                borderColor: theme.palette.divider,
-                                backgroundColor: theme.palette.background.paper,
+                                color: theme.vars.palette.grey[50],
+                                borderColor: theme.vars.palette.divider,
+                                backgroundColor: theme.vars.palette.background.paper,
                                 '&:hover': {
-                                    borderColor: alpha(theme.palette.divider, 0.2),
-                                    backgroundColor: lighten(theme.palette.background.paper, 0.05),
+                                    borderColor: `color-mix(in srgb, ${theme.vars.palette.divider}, transparent 20%)`,
+                                    background: `color-mix(in srgb, ${theme.vars.palette.background.paper}, white 5%)`,
                                 },
                             }),
                         ],

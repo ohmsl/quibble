@@ -1,4 +1,4 @@
-import { Box, Grid2 as Grid, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Paper, Typography } from '@mui/material';
 import { addMonths, eachDayOfInterval, endOfMonth, format, isSameDay, isSameMonth, startOfMonth, subMonths } from 'date-fns';
 import { ArrowLeftIcon, ArrowRightIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -81,7 +81,7 @@ export const MonthlyView = () => {
                 </IconButton>
             </Box>
             <Box bgcolor="divider">
-                <Grid container spacing="1px" height="100%" pt="1px" columns={7}>
+                <Grid container spacing="1px" height="100%" pt="1px" columns={7} sx={{ flexGrow: 1 }}>
                     {daysOfWeek.map(day => (
                         <Grid key={day} size={1} py={0.5} bgcolor="background.default">
                             <Typography variant="body2" color="text.secondary" fontWeight="bold" textAlign="center">
