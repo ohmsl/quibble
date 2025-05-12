@@ -1,7 +1,7 @@
-import { StateCreator } from 'zustand';
-import { MembersRecord } from '../../../types/pb_types';
-import pb from '../../pocketbase/pb';
-import { subscribeToCollection } from '../utils/subscribeToCollection';
+import { StateCreator } from "zustand";
+import { MembersRecord } from "../../../types/pb_types";
+import pb from "../../pocketbase/pb";
+import { subscribeToCollection } from "../utils/subscribeToCollection";
 
 export type MembersState = {
     members: Array<MembersRecord>;
@@ -10,15 +10,20 @@ export type MembersState = {
 
 export type MembersActions = {
     fetchMembers: () => Promise<void>;
-    addMember: (member: Omit<MembersRecord, 'id'>) => Promise<void>;
+    addMember: (member: Omit<MembersRecord, "id">) => Promise<void>;
     updateMember: (id: string, member: Partial<MembersRecord>) => Promise<void>;
     removeMember: (id: string) => Promise<void>;
 };
 
 export type MembersSlice = MembersState & MembersActions;
 
-export const createMembersSlice: StateCreator<MembersSlice, [], [], MembersSlice> = set => {
-    subscribeToCollection('members', '*', set);
+export const createMembersSlice: StateCreator<
+    MembersSlice,
+    [],
+    [],
+    MembersSlice
+> = (set, get) => {
+    subscribeToCollection("members", "*", set, get);
 
     return {
         members: [],
@@ -27,10 +32,12 @@ export const createMembersSlice: StateCreator<MembersSlice, [], [], MembersSlice
         fetchMembers: async () => {
             set({ loading: true });
             try {
-                const members = await pb.collection<MembersRecord>('members').getFullList();
+                const members = await pb
+                    .collection<MembersRecord>("members")
+                    .getFullList();
                 set({ members, loading: false });
             } catch (error: unknown) {
-                console.error('Error fetching members:', error);
+                console.error("Error fetching members:", error);
                 set({ loading: false });
             }
         },
@@ -39,12 +46,16 @@ export const createMembersSlice: StateCreator<MembersSlice, [], [], MembersSlice
          * Add a new member.
          * @param member - Member data without the id.
          */
-        addMember: async (member: Omit<MembersRecord, 'id'>) => {
+        addMember: async (member: Omit<MembersRecord, "id">) => {
             try {
-                const createdMember = await pb.collection<MembersRecord>('members').create(member);
-                set(state => ({ members: [...state.members, createdMember] }));
+                const createdMember = await pb
+                    .collection<MembersRecord>("members")
+                    .create(member);
+                set((state) => ({
+                    members: [...state.members, createdMember],
+                }));
             } catch (error: unknown) {
-                console.error('Error adding member:', error);
+                console.error("Error adding member:", error);
             }
         },
 
@@ -55,12 +66,16 @@ export const createMembersSlice: StateCreator<MembersSlice, [], [], MembersSlice
          */
         updateMember: async (id: string, member: Partial<MembersRecord>) => {
             try {
-                const updatedMember = await pb.collection<MembersRecord>('members').update(id, member);
-                set(state => ({
-                    members: state.members.map(p => (p.id === id ? updatedMember : p)),
+                const updatedMember = await pb
+                    .collection<MembersRecord>("members")
+                    .update(id, member);
+                set((state) => ({
+                    members: state.members.map((p) =>
+                        p.id === id ? updatedMember : p,
+                    ),
                 }));
             } catch (error: unknown) {
-                console.error('Error updating member:', error);
+                console.error("Error updating member:", error);
             }
         },
 
@@ -69,12 +84,12 @@ export const createMembersSlice: StateCreator<MembersSlice, [], [], MembersSlice
          * @param id - ID of the member to remove.  */
         removeMember: async (id: string) => {
             try {
-                await pb.collection('members').delete(id);
-                set(state => ({
-                    members: state.members.filter(p => p.id !== id),
+                await pb.collection("members").delete(id);
+                set((state) => ({
+                    members: state.members.filter((p) => p.id !== id),
                 }));
             } catch (error: unknown) {
-                console.error('Error removing member:', error);
+                console.error("Error removing member:", error);
             }
         },
     };

@@ -136,6 +136,7 @@ export type MembersRecord = {
 	owner_id: RecordIdString
 	permission_level?: number
 	updated?: IsoDateString
+	user_id?: RecordIdString
 }
 
 export type OrganisationsRecord = {
@@ -149,7 +150,7 @@ export type OrganisationsRecord = {
 export type RolesRecord = {
 	created?: IsoDateString
 	description?: string
-	icon: string
+	icon?: string
 	id: string
 	maxAssignments?: number
 	minAssignments?: number

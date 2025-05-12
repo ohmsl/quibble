@@ -1,5 +1,5 @@
-import { Grid, Paper } from '@mui/material';
-import { useAppState } from '../../state/useAppState';
+import { Grid, Paper } from "@mui/material";
+import { useAppState } from "../../state/useAppState";
 
 export const GridView = () => {
     const roles = useAppState.use.roles();
@@ -8,15 +8,11 @@ export const GridView = () => {
 
     return (
         <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-            <Grid size={12}>
-                <Paper>A/V</Paper>
-            </Grid>
-            <Grid size={columnSize}>
-                <Paper>Microphones</Paper>
-            </Grid>
-            <Grid size={columnSize}>
-                <Paper>Platform</Paper>
-            </Grid>
+            {roles.map((role, index) => (
+                <Grid key={index} size={columnSize}>
+                    <Paper>{role.name}</Paper>
+                </Grid>
+            ))}
         </Grid>
     );
 };

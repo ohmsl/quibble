@@ -1,9 +1,13 @@
-import { createSelector } from 'reselect';
-import { StateCreator } from 'zustand';
-import { EventsRecord } from '../../../types/pb_types';
-import pb from '../../pocketbase/pb';
-import { useAppState } from '../useAppState';
-import { subscribeToCollection } from '../utils/subscribeToCollection';
+import { createSelector } from "reselect";
+import { toast } from "sonner";
+import { StateCreator } from "zustand";
+import { EventsRecord } from "../../../types/pb_types";
+import { generateId } from "../../../utils/generateId";
+import { createScopedLogger } from "../../../utils/logger";
+import pb from "../../pocketbase/pb";
+import { useAppState } from "../useAppState";
+import { createScopedCrudMethods } from "../utils/crud/createScopedCrudMethods";
+import { subscribeToCollection } from "../utils/subscribeToCollection";
 
 type EventsState = {
     events: Array<EventsRecord>;
@@ -12,15 +16,26 @@ type EventsState = {
 
 type EventsActions = {
     fetchEvents: () => Promise<void>;
-    addEvent: (event: Omit<EventsRecord, 'id' | 'user_id' | 'org_id' | 'owner_id' | 'created' | 'updated'>) => Promise<void>;
-    updateEvent: (id: string, event: Partial<EventsRecord>) => Promise<void>;
+    addEvent: (event: EventsRecord) => Promise<void>;
+    updateEvent: (id: string, event: EventsRecord) => Promise<void>;
     removeEvent: (id: string) => Promise<void>;
 };
 
 export type EventsSlice = EventsState & EventsActions;
 
-export const createEventsSlice: StateCreator<EventsSlice, [], [], EventsSlice> = set => {
-    subscribeToCollection('events', '*', set);
+export const createEventsSlice: StateCreator<
+    EventsSlice,
+    [],
+    [],
+    EventsSlice
+> = (set, get) => {
+    subscribeToCollection("events", "*", set, get);
+    const logger = createScopedLogger("eventsSlice");
+    const { insert, upsert, remove } = createScopedCrudMethods(
+        set,
+        get,
+        "events",
+    );
 
     return {
         // State
@@ -31,40 +46,69 @@ export const createEventsSlice: StateCreator<EventsSlice, [], [], EventsSlice> =
         fetchEvents: async () => {
             set({ loading: true });
             try {
-                const events = await pb.collection<EventsRecord>('events').getFullList();
+                const events = await pb
+                    .collection<EventsRecord>("events")
+                    .getFullList();
                 set({ events, loading: false });
             } catch (error: unknown) {
-                console.error('Error fetching events:', error);
+                console.error("Error fetching events:", error);
                 set({ loading: false });
             }
         },
 
-        addEvent: async event => {
+        addEvent: async (eventData) => {
+            const id = generateId();
+            const org_id = useAppState.getState().orgId;
+            if (!org_id) throw new Error("Organization ID not found");
+
+            const event = {
+                ...eventData,
+                org_id,
+                id,
+            } as EventsRecord;
+
             try {
-                const org_id = useAppState.getState().orgId;
-                const createdEvent = await pb.collection<EventsRecord>('events').create({ ...event, org_id });
-                handlers.create(createdEvent);
-            } catch (error: unknown) {
-                console.error('Error adding event:', error);
+                insert(event);
+
+                await pb
+                    .collection<EventsRecord>("events")
+                    .create({ ...event, org_id });
+            } catch (error) {
+                console.error("Error adding event:", error);
+                toast.error("Failed to add event");
+
+                remove(event.id);
             }
         },
 
         updateEvent: async (id, event) => {
+            const originalRecord = get().events.find((r) => r.id === id);
+
             try {
-                const org_id = useAppState.getState().orgId;
-                const updatedEvent = await pb.collection<EventsRecord>('events').update(id, { ...event, org_id });
-                handlers.update(updatedEvent);
-            } catch (error: unknown) {
-                console.error('Error updating event:', error);
+                upsert(event);
+
+                await pb.collection<EventsRecord>("events").update(id, event);
+            } catch (error) {
+                console.error("Error updating event:", error);
+                toast.error("Failed to update event");
+
+                if (originalRecord) upsert(originalRecord);
             }
         },
 
-        removeEvent: async id => {
+        removeEvent: async (id) => {
+            const originalRecord = get().events.find((r) => r.id === id);
+
             try {
-                await pb.collection('events').delete(id);
-                handlers.delete(id);
-            } catch (error: unknown) {
-                console.error('Error removing event:', error);
+                remove(id);
+
+                await pb.collection("events").delete(id);
+                set({ events: get().events.filter((e) => e.id !== id) });
+            } catch (error) {
+                console.error("Error removing event:", error);
+                toast.error("Failed to remove event");
+
+                if (originalRecord) upsert(originalRecord);
             }
         },
     };
@@ -72,5 +116,5 @@ export const createEventsSlice: StateCreator<EventsSlice, [], [], EventsSlice> =
 
 export const selectEvents = createSelector(
     (state: EventsSlice) => state.events,
-    events => events,
+    (events) => events,
 );

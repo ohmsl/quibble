@@ -1,15 +1,22 @@
-import { List, ListItem, ListItemIcon, ListItemText, Paper, Stack } from '@mui/material';
-import { CircleHelpIcon, EditIcon, Trash2Icon } from 'lucide-react';
-import { ActionMenu } from '../../components/ActionMenu';
-import { ConfirmPrompt } from '../../components/ConfirmPrompt';
-import { useDialog } from '../../providers/DialogProvider';
-import type { Role } from '../../types/Role';
-import { useAppState } from '../state/useAppState';
-import { RoleForm } from './RoleForm';
-import { roleIconMap } from './roleIcons';
+import {
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Paper,
+    Stack,
+} from "@mui/material";
+import { CircleHelpIcon, EditIcon, Trash2Icon } from "lucide-react";
+import { ActionMenu } from "../../components/ActionMenu";
+import { ConfirmPrompt } from "../../components/ConfirmPrompt";
+import { useDialog } from "../../providers/DialogProvider";
+import { RolesRecord } from "../../types/pb_types";
+import { useAppState } from "../state/useAppState";
+import { RoleForm } from "./RoleForm";
+import { roleIconMap } from "./roleIcons";
 
 type Props = {
-    roles: Array<Role>;
+    roles: Array<RolesRecord>;
 };
 
 export const RolesList: React.FC<Props> = ({ roles }) => {
@@ -18,18 +25,24 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
     const updateRole = useAppState.use.updateRole();
     const removeRole = useAppState.use.removeRole();
 
-    const handleSaveRole = (role: Role) => {
+    const handleSaveRole = (role: RolesRecord) => {
         if (!role.id) addRole(role);
         else updateRole(role.id, role);
 
         closeDialog();
     };
 
-    const handleEdit = (role: Role) => {
-        showDialog(<RoleForm defaultValues={role} onClose={closeDialog} onSubmit={handleSaveRole} />);
+    const handleEdit = (role: RolesRecord) => {
+        showDialog(
+            <RoleForm
+                defaultValues={role}
+                onClose={closeDialog}
+                onSubmit={handleSaveRole}
+            />,
+        );
     };
 
-    const handleRemove = (role: Role) => {
+    const handleRemove = (role: RolesRecord) => {
         showDialog(
             <ConfirmPrompt
                 title="Remove Role"
@@ -39,15 +52,15 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
                     removeRole(role.id);
                     closeDialog();
                 }}
-                confirmButton={{ text: 'Remove', color: 'error' }}
-                cancelButton={{ text: 'Cancel' }}
+                confirmButton={{ text: "Remove", color: "error" }}
+                cancelButton={{ text: "Cancel" }}
             />,
         );
     };
 
     return (
         <List component={Stack} spacing={1}>
-            {roles.map(role => {
+            {roles.map((role) => {
                 const Icon = roleIconMap[role.icon];
 
                 return (
@@ -59,16 +72,16 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
                             <ActionMenu
                                 actions={[
                                     {
-                                        label: 'Edit',
+                                        label: "Edit",
                                         icon: <EditIcon />,
                                         onClick: () => handleEdit(role),
                                     },
                                     {
-                                        label: 'Delete',
+                                        label: "Delete",
                                         icon: <Trash2Icon />,
                                         menuItemProps: {
-                                            color: 'error',
-                                            sx: { color: 'error.main' },
+                                            color: "error",
+                                            sx: { color: "error.main" },
                                         },
                                         onClick: () => handleRemove(role),
                                     },
@@ -77,16 +90,18 @@ export const RolesList: React.FC<Props> = ({ roles }) => {
                         }
                         sx={{ minHeight: 76, pr: 7 }}
                     >
-                        <ListItemIcon>{Icon ? <Icon /> : <CircleHelpIcon />}</ListItemIcon>
+                        <ListItemIcon>
+                            {Icon ? <Icon /> : <CircleHelpIcon />}
+                        </ListItemIcon>
                         <ListItemText
                             primary={role.name}
                             secondary={role.description}
                             slotProps={{
                                 secondary: {
                                     sx: {
-                                        textWrap: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
+                                        textWrap: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
                                     },
                                 },
                             }}
