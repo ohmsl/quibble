@@ -27,27 +27,11 @@ export const handleCollectionEvent = <
     collection: `${Collections}`,
 ) => {
     const logger = createScopedLogger(`${collection} sub`);
-    const { insert, upsert, remove } = createScopedCrudMethods(
-        set,
-        get,
-        collection,
-    );
-
-    const checkExists = (id: string) => {
-        const state = get();
-        return (state[collection] as T[]).find((item) => item.id === id);
-    };
+    const { upsert, remove } = createScopedCrudMethods(set, get, collection);
 
     const handleCreate = (record: T) => {
-        // ensure doesn't already exist
-        if (checkExists(record.id)) {
-            logger.warn(
-                `Record with id ${record.id} already exists, skipping creation.`,
-            );
-            return;
-        }
-
-        insert(record);
+        // we upsert so that if it does exist, we overwrite it
+        upsert(record);
     };
 
     const handleUpdate = (record: T) => {
