@@ -1,7 +1,9 @@
-import PocketBase from 'pocketbase';
-import { TypedPocketBase } from '../../types/pb_types';
+import PocketBase from "pocketbase";
+import { TypedPocketBase } from "../../types/pb_types";
 
-const pb = new PocketBase('http://localhost:8090') as TypedPocketBase;
+const pbEndpoint = import.meta.env.VITE_PB_ENDPOINT;
+
+const pb = new PocketBase(pbEndpoint) as TypedPocketBase;
 
 (window as any).pb = pb;
 
