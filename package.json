@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "server": "cd ./server && go run cmd/main.go serve --http=\"0.0.0.0:8090\"",
+        "server": "cd ./server && go run cmd/main.go serve --http=\"0.0.0.0:8090\" --",
         "build": "tsc && vite build",
         "typegen": "pocketbase-typegen --db ./server/pb_data/data.db --out ./src/types/pb_types.ts",
         "preview": "vite preview",

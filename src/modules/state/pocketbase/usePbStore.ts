@@ -1,12 +1,15 @@
-import { create } from 'zustand';
-import { createSelectors } from '../utils/createSelectors';
-import { AuthSlice, createAuthSlice } from './authSlice';
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import { createSelectors } from "../utils/createSelectors";
+import { AuthSlice, createAuthSlice } from "./authSlice";
 
 type StoreState = AuthSlice;
 
 export const usePbStore = createSelectors(
-    create<StoreState>()((...a) => ({
-        ...createAuthSlice(...a),
-        // ...createStorageSlice(...a),
-    })),
+    create<StoreState>()(
+        devtools((...a) => ({
+            ...createAuthSlice(...a),
+            // ...createStorageSlice(...a),
+        })),
+    ),
 );
