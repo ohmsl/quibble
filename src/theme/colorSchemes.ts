@@ -4,10 +4,10 @@ import { DefaultColorScheme } from "@mui/material/styles/createThemeWithVars";
 const theme = createTheme();
 const augmentColor = createTheme().palette.augmentColor;
 
-type ColorSchemes =
-    | (Partial<Record<DefaultColorScheme, boolean | ColorSystemOptions>> &
-          Record<never, ColorSystemOptions>)
-    | undefined;
+type ColorSchemes = Partial<
+    Record<DefaultColorScheme, boolean | ColorSystemOptions>
+> &
+    Record<never, ColorSystemOptions>;
 
 export const colorSchemes: ColorSchemes = {
     light: {
